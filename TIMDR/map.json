@@ -1,0 +1,19 @@
+{
+  "fields": [
+    "public_debt",
+    "interest_rates",
+    "capital_flows",
+    "fx_rates",
+    "commodity_prices"
+  ],
+  "dimensions": [
+    "time",
+    "country",
+    "sector"
+  ],
+  "required_continuity": [
+    "public_debt:time,country",
+    "interest_rates:time,country",
+    "capital_flows:time,country,sector"
+  ]
+}
