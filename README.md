@@ -1,24 +1,34 @@
-Globalny System Finansowy (GSF)
+GSF — Globalny System Finansowy
 GSF to model strukturalny globalnego systemu finansowego, który analizuje pole informacji, a nie pojedyncze liczby.
 Łączy cztery warstwy:
-TIMDR (ciągłość danych),
-GIA (redukcja modeli),
-FIELDCORE (tensor wpływów),
-CORE‑NODES (rdzenie deformacji: USA–UE–Chiny).
 
-GSF wykrywa przerwania, nadmiary, deformacje i napięcia w globalnym polu finansowym — czyli problemy, których obecne modele nie widzą.
+TIMDR — ciągłość danych
+
+GIA — redukcja modeli
+
+FIELDCORE — tensor wpływów
+
+CORE‑NODES — rdzenie deformacji (USA–UE–Chiny)
+
+GSF wykrywa przerwania, nadmiary, deformacje i napięcia w globalnym polu finansowym — problemy, których obecne modele nie widzą.
 
 Dlaczego GSF powstał — realny problem
 Globalny system finansowy ma jedną fundamentalną wadę:
-nie ma spójności struktury informacji.
+brak spójności struktury informacji.
 
-Instytucje finansowe analizują liczby, wskaźniki, tabele, ale nie analizują:
-– ciągłości danych,
-– tensorowych zależności między sektorami,
-– deformacji pola między krajami,
-– nadmiaru w modelach,
-– przerwań w przepływach kapitału,
-– napięć systemowych.
+Instytucje finansowe analizują liczby, wskaźniki i tabele, ale nie analizują:
+
+ciągłości danych,
+
+tensorowych zależności między sektorami,
+
+deformacji pola między krajami,
+
+nadmiaru w modelach,
+
+przerwań w przepływach kapitału,
+
+napięć systemowych.
 
 GSF jest pierwszym modelem, który traktuje globalne finanse jak pole, nie jak arkusz kalkulacyjny.
 
@@ -72,7 +82,7 @@ GSF/RISK/ — ryzyko systemowe w ujęciu strukturalnym
 
 W czym pomaga GSF (realnie, operacyjnie)
 GSF wykrywa przerwania ciągłości danych
-TIMDR pokazuje, gdzie globalne dane finansowe mają „dziury”, niespójności, brakujące odcinki.
+TIMDR pokazuje, gdzie globalne dane finansowe mają „dziury”, niespójności i brakujące odcinki.
 
 GSF redukuje przeładowane modele finansowe
 GIA usuwa nadmiar pól i zostawia tylko te, które faktycznie sterują systemem.
@@ -91,13 +101,13 @@ RISK pokazuje napięcie pola, nie pojedynczy wskaźnik.
 
 Jak wypromować GSF (bez marketingowego bełkotu)
 1. Pokazać, że GSF rozwiązuje problem, którego nikt nie rusza
-Brak spójności struktury danych finansowych — to luka w całej branży.
+Brak spójności struktury danych finansowych — luka w całej branży.
 
 2. Pokazać, że GSF jest kompatybilny z istniejącymi systemami
 JSON, CSV, API — plug‑in, nie rewolucja.
 
 3. Pokazać, że GSF jest model‑agnostic
-Może walidować modele ryzyka, makro, wyceny, przepływów.
+Może walidować modele ryzyka, makro, wyceny i przepływów.
 
 4. Pokazać, że GSF jest narzędziem do compliance strukturalnego
 Nowa kategoria: zgodność struktury informacji, nie tylko zgodność prawna.
