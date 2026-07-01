@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "object"
+    },
+    "links": {
+      "type": "object"
+    },
+    "tensors": {
+      "type": "object"
+    }
+  },
+  "required": ["nodes", "links", "tensors"]
+}
