@@ -1,0 +1,2 @@
+# GSF
+Globalny System Finansowy
