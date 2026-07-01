@@ -1,0 +1,8 @@
+{
+  "checks": {
+    "timdr": "GSF/TIMDR/map.json",
+    "gia": "GSF/GIA/gia_map.json",
+    "fieldcore": "GSF/FIELDCORE/fieldcore_map.json",
+    "nodes": "GSF/CORE-NODES/nodes.json"
+  }
+}
