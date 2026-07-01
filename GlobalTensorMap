@@ -1,0 +1,84 @@
+# GlobalTensorMap — Globalna Mapa Tensorowa Pola Finansowego
+
+GlobalTensorMap jest modułem GSF odpowiedzialnym za odwzorowanie globalnego pola finansowego w formie tensorowej mapy wpływów.  
+Model nie analizuje liczb — analizuje **deformacje pola**, **ciągłość informacji**, **sprzężenia między węzłami** oraz **propagację napięcia** w skali globalnej.
+
+GlobalTensorMap integruje:
+- TIMDR — ciągłość danych,
+- GIA — redukcję modeli,
+- FIELDCORE — tensor wpływów,
+- CORE‑NODES — rdzenie pola (USA, UE, Chiny, G10),
+- RISK — napięcia systemowe.
+
+---
+
+## Cel modułu
+
+GlobalTensorMap tworzy jedną spójną mapę tensorową, która pokazuje:
+- kierunki przepływów kapitału,
+- deformacje pola między państwami i sektorami,
+- propagację napięcia finansowego,
+- sprzężenia między rdzeniami globalnego systemu,
+- lokalne i globalne przerwania ciągłości danych.
+
+Mapa tensorowa jest podstawą do:
+- analizy ryzyka systemowego,
+- wykrywania krytycznych punktów pola,
+- oceny stabilności globalnych przepływów,
+- budowy modeli wczesnego ostrzegania.
+
+---
+
+## Struktura modułu
+GSF/
+└── GlobalTensorMap/
+README.md
+
+Kod
+
+---
+
+## Elementy mapy tensorowej
+
+### 1. Tensor przepływów kapitału
+- kierunek przepływu,
+- intensywność,
+- deformacje pola,
+- sprzężenia między węzłami.
+
+### 2. Tensor walutowy
+- wpływ zmian kursów,
+- propagacja napięcia walutowego,
+- deformacje pola przy interwencjach monetarnych.
+
+### 3. Tensor handlowy
+- powiązania sektorowe,
+- przerwania ciągłości,
+- lokalne deformacje pola.
+
+### 4. Tensor surowcowy
+- wpływ cen energii,
+- sprzężenia z rynkami przemysłowymi,
+- propagacja napięcia surowcowego.
+
+### 5. Tensor polityki monetarnej
+- zmiany stóp procentowych,
+- deformacje pola w rdzeniach,
+- propagacja napięcia do G10 i BRICS.
+
+---
+
+## Wynik końcowy
+
+GlobalTensorMap generuje:
+- globalną mapę tensorową pola finansowego,
+- profil napięcia systemowego,
+- kierunki propagacji ryzyka,
+- lokalne i globalne deformacje pola,
+- spójny obraz działania globalnego systemu finansowego.
+
+Moduł jest podstawą dla:
+- RISK,
+- CORE‑NODES,
+- FIELDCORE,
+- TIMDR.
