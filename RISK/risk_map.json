@@ -1,0 +1,13 @@
+{
+  "dimensions": [
+    "timdr_breaks",
+    "gia_overload",
+    "fieldcore_tension",
+    "core_nodes_weakness"
+  ],
+  "levels": [
+    "stable",
+    "stressed",
+    "critical"
+  ]
+}
