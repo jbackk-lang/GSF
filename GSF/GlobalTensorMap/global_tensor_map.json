@@ -1,0 +1,35 @@
+{
+  "nodes": {
+    "USA": {},
+    "EU": {},
+    "China": {},
+    "G10": {
+      "USA": {},
+      "UK": {},
+      "Canada": {},
+      "Japan": {},
+      "Switzerland": {},
+      "Sweden": {},
+      "Netherlands": {},
+      "Belgium": {},
+      "France": {},
+      "Germany": {}
+    }
+  },
+
+  "links": {
+    "capital_flows": [],
+    "currency_relations": [],
+    "trade_relations": [],
+    "commodity_relations": [],
+    "monetary_policy_relations": []
+  },
+
+  "tensors": {
+    "capital_tensor": {},
+    "currency_tensor": {},
+    "trade_tensor": {},
+    "commodity_tensor": {},
+    "monetary_policy_tensor": {}
+  }
+}
