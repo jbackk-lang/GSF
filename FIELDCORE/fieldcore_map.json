@@ -1,0 +1,14 @@
+{
+  "nodes": [
+    "capital",
+    "fx",
+    "trade",
+    "commodities"
+  ],
+  "influence_matrix": {
+    "capital":      ["fx", "trade"],
+    "fx":           ["capital", "commodities"],
+    "trade":        ["capital", "commodities"],
+    "commodities":  ["fx", "trade"]
+  }
+}
