@@ -1,0 +1,190 @@
+{
+  "nodes": {
+    "USA": {
+      "type": "core",
+      "continuity": {
+        "macro": "high",
+        "banking": "medium",
+        "reporting": "fragmented"
+      },
+      "stress": {
+        "debt": "high",
+        "liquidity": "medium"
+      }
+    },
+
+    "EU": {
+      "type": "core",
+      "continuity": {
+        "macro": "medium",
+        "energy": "low",
+        "reporting": "mixed"
+      },
+      "stress": {
+        "energy": "high",
+        "industry": "medium"
+      }
+    },
+
+    "China": {
+      "type": "core",
+      "continuity": {
+        "macro": "medium",
+        "industry": "high",
+        "reporting": "opaque"
+      },
+      "stress": {
+        "real_estate": "high",
+        "trade": "medium"
+      }
+    },
+
+    "G10": {
+      "USA": {},
+      "UK": {},
+      "Canada": {},
+      "Japan": {},
+      "Switzerland": {},
+      "Sweden": {},
+      "Netherlands": {},
+      "Belgium": {},
+      "France": {},
+      "Germany": {}
+    }
+  },
+
+  "links": {
+    "capital_flows": [
+      {
+        "from": "USA",
+        "to": "EU",
+        "weight": 0.82,
+        "direction": "outbound",
+        "deformation": 0.14
+      },
+      {
+        "from": "EU",
+        "to": "China",
+        "weight": 0.63,
+        "direction": "outbound",
+        "deformation": 0.22
+      },
+      {
+        "from": "China",
+        "to": "USA",
+        "weight": 0.71,
+        "direction": "outbound",
+        "deformation": 0.19
+      }
+    ],
+
+    "currency_relations": [
+      {
+        "pair": "USD/EUR",
+        "volatility": 0.27,
+        "stress": 0.18
+      },
+      {
+        "pair": "USD/CNY",
+        "volatility": 0.34,
+        "stress": 0.25
+      },
+      {
+        "pair": "EUR/JPY",
+        "volatility": 0.22,
+        "stress": 0.15
+      }
+    ],
+
+    "trade_relations": [
+      {
+        "from": "USA",
+        "to": "China",
+        "weight": 0.91,
+        "sector": "technology",
+        "deformation": 0.33
+      },
+      {
+        "from": "EU",
+        "to": "USA",
+        "weight": 0.77,
+        "sector": "industry",
+        "deformation": 0.21
+      }
+    ],
+
+    "commodity_relations": [
+      {
+        "commodity": "oil",
+        "nodes": ["USA", "EU", "China"],
+        "stress": 0.41,
+        "deformation": 0.29
+      },
+      {
+        "commodity": "gas",
+        "nodes": ["EU"],
+        "stress": 0.52,
+        "deformation": 0.37
+      }
+    ],
+
+    "monetary_policy_relations": [
+      {
+        "node": "USA",
+        "policy": "interest_rate",
+        "impact": {
+          "EU": 0.44,
+          "China": 0.31,
+          "G10": 0.52
+        }
+      }
+    ]
+  },
+
+  "tensors": {
+    "capital_tensor": {
+      "global_stress": 0.33,
+      "propagation": {
+        "USA": 0.41,
+        "EU": 0.29,
+        "China": 0.37
+      }
+    },
+
+    "currency_tensor": {
+      "usd_dominance": 0.78,
+      "eur_stability": 0.52,
+      "cny_pressure": 0.61
+    },
+
+    "trade_tensor": {
+      "technology": {
+        "USA": 0.91,
+        "China": 0.88,
+        "EU": 0.63
+      },
+      "industry": {
+        "EU": 0.84,
+        "USA": 0.72,
+        "China": 0.69
+      }
+    },
+
+    "commodity_tensor": {
+      "energy": {
+        "oil": 0.71,
+        "gas": 0.83,
+        "coal": 0.44
+      }
+    },
+
+    "monetary_policy_tensor": {
+      "interest_rate_shock": {
+        "USA": 0.52,
+        "EU": 0.37,
+        "China": 0.29,
+        "G10": 0.48
+      }
+    }
+  }
+}
