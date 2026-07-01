@@ -1,0 +1,13 @@
+{
+  "core_fields": [
+    "interest_rates",
+    "public_debt",
+    "capital_flows",
+    "fx_rates",
+    "commodity_index"
+  ],
+  "discard_rules": {
+    "correlation_threshold": 0.95,
+    "variance_threshold": 0.01
+  }
+}
