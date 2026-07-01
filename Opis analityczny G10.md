@@ -44,3 +44,64 @@ G10 pozwala:
 
 ## Pliki do dodania
 
+
+GSF/CORE-NODES/G10/README.md
+GSF/CORE-NODES/G10/USA.md
+GSF/CORE-NODES/G10/UK.md
+GSF/CORE-NODES/G10/Canada.md
+GSF/CORE-NODES/G10/Japan.md
+GSF/CORE-NODES/G10/Switzerland.md
+GSF/CORE-NODES/G10/Sweden.md
+GSF/CORE-NODES/G10/Netherlands.md
+GSF/CORE-NODES/G10/Belgium.md
+GSF/CORE-NODES/G10/France.md
+GSF/CORE-NODES/G10/Germany.md
+
+Kod
+
+Każdy plik może mieć identyczny szablon:
+- lokalne deformacje pola,
+- tensor wpływów,
+- przerwania ciągłości,
+- ryzyko systemowe,
+- przepływy kapitału.
+
+---
+
+## Gotowy szablon dla każdego państwa
+
+[Państwo] — Węzeł G10
+Ciągłość danych (TIMDR)
+przerwania ciągłości
+
+niespójności sektorowe
+
+różnice raportowe
+
+Redukcja modeli (GIA)
+minimalna struktura sterująca
+
+kluczowe pola makro
+
+Tensor wpływów (FIELDCORE)
+kapitał
+
+waluty
+
+handel
+
+surowce
+
+polityka monetarna
+
+Ryzyko systemowe (RISK)
+lokalne napięcia
+
+sprzężenia z innymi węzłami G10
+
+propagacja ryzyka
+
+Przepływy kapitału
+kierunki przepływów
+
+deformacje pola
