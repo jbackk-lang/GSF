@@ -110,3 +110,32 @@ GSF rozwiązuje problem, którego nikt nie rusza:
 
 Obecne systemy analizują liczby.  
 GSF analizuje **pole** — ciągłość, tensor, rdzenie i napięcia.
+
+# G10 — Rozszerzony moduł rdzeni pola (CORE‑NODES)
+
+Moduł G10 rozszerza analizę rdzeni pola o dziesięć kluczowych gospodarek świata.
+Każde państwo jest traktowane jako osobny węzeł deformacji pola finansowego.
+
+G10 obejmuje:
+- USA
+- Wielką Brytanię
+- Kanadę
+- Japonię
+- Szwajcarię
+- Szwecję
+- Holandię
+- Belgię
+- Francję
+- Niemcy
+
+Każdy węzeł posiada:
+- lokalne deformacje pola,
+- tensor wpływów sektorowych,
+- przerwania ciągłości danych,
+- różnice w raportowaniu finansowym,
+- przepływy kapitału między węzłami G10 i resztą świata.
+
+---
+
+## Struktura modułu
+
