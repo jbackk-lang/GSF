@@ -853,7 +853,7 @@
   <section>
     <div class="section-head">
       <h2>Powiązania międzyrynkowe <span style="font-weight:400; color:var(--ink-faint);">(tensor wpływów — FIELDCORE)</span></h2>
-      <span class="note">macierz powiązań: fieldcore_map.json · 4/4 rynki obsadzone danymi</span>
+      <span class="note" id="fieldcore-note">macierz powiązań: fieldcore_map.json · 4/4 rynki obsadzone danymi</span>
     </div>
     <div class="tensor-wrap">
       <div class="tensor-svg-box">
@@ -873,25 +873,25 @@
           <g>
             <circle cx="120" cy="70" r="42" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"></circle>
             <text x="120" y="65" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="var(--ink)">kapitał</text>
-            <text x="120" y="82" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
+            <text id="svg-capital-status" x="120" y="82" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
           </g>
           <!-- fx -->
           <g>
             <circle cx="300" cy="70" r="42" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"></circle>
             <text x="300" y="65" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="var(--ink)">waluty</text>
-            <text x="300" y="82" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
+            <text id="svg-fx-status" x="300" y="82" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
           </g>
           <!-- trade -->
           <g>
             <circle cx="120" cy="270" r="42" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"></circle>
             <text x="120" y="265" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="var(--ink)">handel</text>
-            <text x="120" y="282" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
+            <text id="svg-trade-status" x="120" y="282" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
           </g>
           <!-- commodities -->
           <g>
             <circle cx="300" cy="270" r="42" fill="var(--warm-soft)" stroke="var(--warm)" stroke-width="1.5"></circle>
             <text x="300" y="263" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12.5" font-weight="600" fill="var(--ink)">surowce</text>
-            <text x="300" y="280" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
+            <text id="svg-commodities-status" x="300" y="280" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
           </g>
         </svg>
       </div>
@@ -899,22 +899,22 @@
       <div class="market-list">
         <div class="market-item">
           <span class="swatch" style="background:var(--accent)"></span>
-          <span class="name">Kapitał <span style="color:var(--ink-faint); font-weight:400;">(capital)</span> <span class="status-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
+          <span class="name">Kapitał <span style="color:var(--ink-faint); font-weight:400;">(capital)</span> <span class="status-badge" id="market-capital-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
           <span class="datum">US CA −226,8 mld · EU CA +261,4 mld · CN CA +184,3 mld</span>
         </div>
         <div class="market-item">
           <span class="swatch" style="background:var(--accent)"></span>
-          <span class="name">Waluty <span style="color:var(--ink-faint); font-weight:400;">(fx)</span> <span class="status-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
+          <span class="name">Waluty <span style="color:var(--ink-faint); font-weight:400;">(fx)</span> <span class="status-badge" id="market-fx-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
           <span class="datum">EUR/USD <span id="fx-eurusd">1,1603</span> · USD/CNY <span id="fx-usdcny">6,7192</span></span>
         </div>
         <div class="market-item">
           <span class="swatch" style="background:var(--accent)"></span>
-          <span class="name">Handel <span style="color:var(--ink-faint); font-weight:400;">(trade)</span> <span class="status-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
+          <span class="name">Handel <span style="color:var(--ink-faint); font-weight:400;">(trade)</span> <span class="status-badge" id="market-trade-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
           <span class="datum">proxy: kierunek rachunku bieżącego (brak osobnego wskaźnika)</span>
         </div>
         <div class="market-item">
           <span class="swatch" style="background:var(--warm)"></span>
-          <span class="name">Surowce <span style="color:var(--ink-faint); font-weight:400;">(commodities)</span> <span class="status-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
+          <span class="name">Surowce <span style="color:var(--ink-faint); font-weight:400;">(commodities)</span> <span class="status-badge" id="market-commodities-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
           <span class="datum">Brent <span id="fx-brent">95,23</span> USD/bbl</span>
         </div>
       </div>
@@ -939,10 +939,10 @@
       <div class="read-card">
         <h3>Jak to czyta GSF <span class="chip model">model strukturalny</span></h3>
         <ul>
-          <li><b>Ciągłość danych: ok</b> <span class="sub">(TIMDR) — 5/5 pól obecnych: dług publiczny, stopy, przepływy kapitału, kursy FX, surowce</span></li>
-          <li><b>Powiązania międzyrynkowe: ok</b> <span class="sub">(FIELDCORE) — 4/4 rynki obsadzone: kapitał, waluty, handel, surowce — bez brakujących węzłów</span></li>
+          <li id="reading-timdr-line"><b>Ciągłość danych: ok</b> <span class="sub">(TIMDR) — 5/5 pól obecnych: dług publiczny, stopy, przepływy kapitału, kursy FX, surowce</span></li>
+          <li id="reading-fieldcore-line"><b>Powiązania międzyrynkowe: ok</b> <span class="sub">(FIELDCORE) — 4/4 rynki obsadzone: kapitał, waluty, handel, surowce — bez brakujących węzłów</span></li>
           <li><b>Rdzenie gospodarek: bez zmian</b> <span class="sub">(core_nodes) — mocne/słabe strony statyczne, nie liczone z powyższych danych, patrz nodes.json</span></li>
-          <li><b>Poziom ryzyka: stabilny</b> <span class="sub">(level: stable) — liczony tylko z kompletności danych, patrz UWAGA O ZAKRESIE w validator.py</span></li>
+          <li id="reading-level-line"><b>Poziom ryzyka: stabilny</b> <span class="sub">(level: stable) — liczony tylko z kompletności danych, patrz UWAGA O ZAKRESIE w validator.py</span></li>
           <li><b>Czego GSF (jeszcze) nie robi:</b> nie ocenia, czy 122% PKB albo +45% r/r ropy jest samo w sobie problemem — brak progów istotności</li>
         </ul>
       </div>
@@ -1466,21 +1466,67 @@
       giaCount.textContent = String(gCount);
     }
 
+    // Wspolne dla RISK-row "Napiecie miedzyrynkowe", sekcji "Powiazania
+    // miedzyrynkowe" (SVG + market-list) i linii w "Jak to czyta GSF" --
+    // wczesniej te trzy miejsca pokazywaly TEN SAM wymiar
+    // (fieldcore_tension), ale tylko RISK-row sie przeliczal, reszta
+    // byla na sztywno wpisana w HTML jako "ok" i nigdy sie nie
+    // zmieniala -- to byla niespojnosc zgloszona przez usera.
+    var PL_MARKET = { capital: 'kapitał', fx: 'waluty', trade: 'handel', commodities: 'surowce' };
+    var FC_ORDER = ['capital', 'fx', 'trade', 'commodities'];
+    var fcOkCount = 0;
+    FC_ORDER.forEach(function (m) { if (result.risk_profile.fieldcore_tension[m] === 'ok') fcOkCount++; });
+
     var fcDetail = document.getElementById('risk-fieldcore-detail');
     var fcPill = document.getElementById('risk-fieldcore-pill');
     var fcCount = document.getElementById('risk-fieldcore-count');
     if (fcDetail && fcPill && fcCount) {
-      var PL_MARKET = { capital: 'kapitał', fx: 'waluty', trade: 'handel', commodities: 'surowce' };
-      var order = ['capital', 'fx', 'trade', 'commodities'];
-      var ok = 0;
-      var parts = order.map(function (m) {
+      var parts = FC_ORDER.map(function (m) {
         var st = result.risk_profile.fieldcore_tension[m];
-        if (st === 'ok') ok++;
         return PL_MARKET[m] + ': ' + (st === 'ok' ? 'ok' : 'brak danych');
       });
       fcDetail.textContent = parts.join(' · ');
-      fcPill.className = 'pill ' + (ok === order.length ? 'ok' : 'warn');
-      fcCount.textContent = ok + '/' + order.length;
+      fcPill.className = 'pill ' + (fcOkCount === FC_ORDER.length ? 'ok' : 'warn');
+      fcCount.textContent = fcOkCount + '/' + FC_ORDER.length;
+    }
+
+    // sekcja "Powiazania miedzyrynkowe" -- SVG (kropka+tekst statusu per
+    // rynek) i lista rynkow (odznaka statusu)
+    FC_ORDER.forEach(function (m) {
+      var st = result.risk_profile.fieldcore_tension[m];
+      var isOk = st === 'ok';
+      var svgText = document.getElementById('svg-' + m + '-status');
+      if (svgText) {
+        svgText.textContent = '● ' + (isOk ? 'ok' : 'brak danych');
+        svgText.setAttribute('fill', isOk ? 'var(--ok)' : 'var(--warn)');
+      }
+      var badge = document.getElementById('market-' + m + '-badge');
+      if (badge) {
+        badge.textContent = isOk ? 'ok' : 'brak danych';
+        badge.style.background = isOk ? 'var(--ok-soft)' : 'var(--warn-soft)';
+        badge.style.color = isOk ? 'var(--ok)' : 'var(--warn)';
+      }
+    });
+    var fcNote = document.getElementById('fieldcore-note');
+    if (fcNote) fcNote.textContent = 'macierz powiązań: fieldcore_map.json · ' + fcOkCount + '/' + FC_ORDER.length + ' rynki obsadzone danymi';
+
+    // linie w karcie "Jak to czyta GSF"
+    var readingTimdr = document.getElementById('reading-timdr-line');
+    if (readingTimdr) {
+      var timdrOk = result.timdr.status === 'ok';
+      readingTimdr.innerHTML = '<b>Ciągłość danych: ' + (timdrOk ? 'ok' : 'przerwana') + '</b> <span class="sub">(TIMDR) — '
+        + (timdrOk ? '5/5 pól obecnych: dług publiczny, stopy, przepływy kapitału, kursy FX, surowce' : result.risk_profile.timdr_breaks.join(' ')) + '</span>';
+    }
+    var readingFieldcore = document.getElementById('reading-fieldcore-line');
+    if (readingFieldcore) {
+      readingFieldcore.innerHTML = '<b>Powiązania międzyrynkowe: ' + (fcOkCount === FC_ORDER.length ? 'ok' : 'niekompletne') + '</b> <span class="sub">(FIELDCORE) — '
+        + fcOkCount + '/' + FC_ORDER.length + ' rynki obsadzone: kapitał, waluty, handel, surowce'
+        + (fcOkCount === FC_ORDER.length ? ' — bez brakujących węzłów' : ' — brakuje: ' + FC_ORDER.filter(function (m) { return result.risk_profile.fieldcore_tension[m] !== 'ok'; }).map(function (m) { return PL_MARKET[m]; }).join(', ')) + '</span>';
+    }
+    var readingLevel = document.getElementById('reading-level-line');
+    if (readingLevel) {
+      var PL_LEVEL2 = { stable: 'stabilny', stressed: 'podwyższone napięcie', critical: 'krytyczny' };
+      readingLevel.innerHTML = '<b>Poziom ryzyka: ' + (PL_LEVEL2[result.level] || result.level) + '</b> <span class="sub">(level: ' + result.level + ') — liczony tylko z kompletności danych, patrz UWAGA O ZAKRESIE w validator.py</span>';
     }
 
     return result;
@@ -1545,30 +1591,39 @@
     var ta = document.getElementById('json-editor');
     var status = document.getElementById('json-editor-status');
     if (!ta) return;
-    var raw = ta.value.trim();
-    if (!raw) {
-      if (status) { status.textContent = 'Puste pole — nic do zastosowania.'; status.className = 'json-editor-status'; }
-      return;
-    }
-    var parsed;
+    // Cala reszta w try/catch -- gdyby cokolwiek tu rzucilo wyjatek (np.
+    // niespodziewany ksztalt danych), user ma to zobaczyc w statusie pod
+    // przyciskiem, a nie miec wrazenie "nic sie nie dzieje" (bledy w
+    // handlerze zdarzen inaczej licza sie tylko do konsoli, ktorej
+    // wiekszosc userow nie otwiera).
     try {
-      parsed = JSON.parse(raw);
+      var raw = ta.value.trim();
+      if (!raw) {
+        if (status) { status.textContent = '⚠ Pole jest puste — wpisz/wklej JSON albo kliknij „Wstaw bieżące dane do edycji”, potem „Zastosuj JSON”.'; status.className = 'json-editor-status is-error'; }
+        return;
+      }
+      var parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch (e) {
+        if (status) { status.textContent = '⚠ Błąd w JSON: ' + e.message; status.className = 'json-editor-status is-error'; }
+        return;
+      }
+      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+        if (status) { status.textContent = '⚠ JSON musi być obiektem (jak dashboard/data.json), nie listą ani wartością prostą.'; status.className = 'json-editor-status is-error'; }
+        return;
+      }
+      renderLive(parsed);
+      var payload = { data: parsed, savedAt: new Date().toLocaleString('pl-PL') };
+      try { localStorage.setItem(GSF_OVERRIDE_KEY, JSON.stringify(payload)); } catch (e) { /* brak storage, np. prywatne okno -- nadpisanie dziala tylko do przeladowania strony */ }
+      setLiveStatus('override', payload.savedAt);
+      gsfRunAnalysis();
+      if (status) {
+        status.textContent = '✓ Zastosowano o ' + payload.savedAt + ' — sprawdź wskaźnik u góry strony i pola z liczbami, powinny się zmienić. Zapisano w tej przeglądarce, nadpisuje dane na żywo, dopóki nie klikniesz „Wyczyść nadpisanie”.';
+        status.className = 'json-editor-status is-ok';
+      }
     } catch (e) {
-      if (status) { status.textContent = 'Błąd w JSON: ' + e.message; status.className = 'json-editor-status is-error'; }
-      return;
-    }
-    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
-      if (status) { status.textContent = 'JSON musi być obiektem (jak dashboard/data.json), nie listą ani wartością prostą.'; status.className = 'json-editor-status is-error'; }
-      return;
-    }
-    renderLive(parsed);
-    var payload = { data: parsed, savedAt: new Date().toLocaleString('pl-PL') };
-    try { localStorage.setItem(GSF_OVERRIDE_KEY, JSON.stringify(payload)); } catch (e) { /* brak storage */ }
-    setLiveStatus('override', payload.savedAt);
-    gsfRunAnalysis();
-    if (status) {
-      status.textContent = 'Zastosowano i zapisano w tej przeglądarce (' + payload.savedAt + '). Nadpisuje dane na żywo, dopóki nie klikniesz „Wyczyść nadpisanie”.';
-      status.className = 'json-editor-status is-ok';
+      if (status) { status.textContent = '⚠ Nieoczekiwany błąd: ' + (e && e.message ? e.message : e); status.className = 'json-editor-status is-error'; }
     }
   }
 
