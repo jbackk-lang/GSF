@@ -4,7 +4,7 @@
     "interest_rates",
     "capital_flows",
     "fx_rates",
-    "commodity_prices"
+    "commodities"
   ],
   "dimensions": [
     "time",
