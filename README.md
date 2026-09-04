@@ -66,7 +66,7 @@ GSF wykrywa brakujące ogniwa, nadmiary i nieciągłość między sektorami.
 - GSF/GIA/ — redukcja modeli, minimalna struktura sterująca  
 - GSF/FIELDCORE/ — tensor wpływów globalnych  
 - GSF/VALIDATOR/ — walidacja struktury pola  
-- GSF/CORE-NODES/ — USA, UE, Chiny jako rdzenie deformacji  
+- GSF/core_nodes/ — USA, UE, Chiny jako rdzenie deformacji (dawniej `CORE-NODES/` — myślnik łamał importy Pythona, przeniesione)  
 - GSF/RISK/ — ryzyko systemowe w ujęciu strukturalnym
 
 ---
