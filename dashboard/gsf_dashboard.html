@@ -560,6 +560,102 @@
   .risk-row .detail .muted { color: var(--ink-faint); }
   .risk-row .stat { text-align: right; }
 
+  /* ---------- override JSON na zywo -- .is-override ---------- */
+  .live-status.is-override .dot2 { background: var(--accent); }
+
+  /* ---------- panel JSON (zaawansowane) ---------- */
+  .json-panel {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 18px 20px;
+  }
+  .json-panel-intro {
+    font-size: 13px;
+    color: var(--ink-muted);
+    line-height: 1.5;
+    margin: 0 0 14px;
+    max-width: 74ch;
+  }
+  .json-panel-intro code {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--bg-sunken);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 12px;
+  }
+  .json-panel-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .json-file-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink-muted);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 7px 12px;
+    cursor: pointer;
+  }
+  .json-file-label input[type="file"] {
+    font-size: 12px;
+    max-width: 180px;
+  }
+  .json-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-sunken);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .json-btn:hover { border-color: var(--accent); }
+  .json-btn-primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: var(--accent);
+  }
+  .json-btn-ghost {
+    background: transparent;
+    color: var(--ink-faint);
+  }
+  #json-editor {
+    width: 100%;
+    min-height: 190px;
+    resize: vertical;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--bg-sunken);
+    border: 1px solid var(--border-soft);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  #json-editor:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .json-editor-status {
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink-faint);
+    margin: 10px 0 0;
+    min-height: 1.4em;
+  }
+  .json-editor-status.is-ok { color: var(--ok); }
+  .json-editor-status.is-error { color: var(--critical); }
+
   /* ---------- footer / sources ---------- */
   footer {
     border-top: 1px solid var(--border);
@@ -592,18 +688,19 @@
     <div class="stamp">
       <span id="live-status" class="live-status"><span class="dot2"></span><span id="live-status-text">sprawdzam dane…</span></span>
       <span>model: GSF <span class="num">v0.2</span> (core_nodes, po naprawie)</span>
-      <span>pola ✎ = edytowalne ręcznie, zapis w przeglądarce</span>
+      <span>pola ✎ = edytowalne ręcznie, zapis w przeglądarce, przelicza werdykt GSF</span>
     </div>
   </header>
 
   <section class="verdict">
-    <span class="pill ok"><span class="dot"></span>STABILNY <span style="opacity:0.65;">(GSF: stable)</span></span>
+    <span class="pill ok" id="verdict-pill"><span class="dot"></span><span id="verdict-label">STABILNY</span> <span style="opacity:0.65;">(GSF: <span id="verdict-level">stable</span>)</span></span>
     <p class="caveat">
-      <b>To nie jest ocena ryzyka rynkowego.</b> GSF liczy „stable”, bo w tej migawce
+      <b>To nie jest ocena ryzyka rynkowego.</b> GSF liczy „stable”, gdy w tej migawce
       żadne z pięciu pól TIMDR i żaden z czterech rynków FIELDCORE nie jest pusty —
       sam fakt kompletności danych, nie ich poziom. Dług USA na 122% PKB czy ropa
       o 45% droższa r/r <em>nie</em> wchodzą jeszcze do tego werdyktu — patrz „Jak
       to czyta ekonomista” obok modelu GSF niżej.
+      <span id="verdict-recompute-note" style="display:block; margin-top:0.4em; color:var(--ink-faint); font-size:0.85em;"></span>
     </p>
     <div class="real-note">
       <span class="label">Poza modelem</span>
@@ -860,24 +957,54 @@
     <div class="risk-table">
       <div class="risk-row">
         <span class="dim">Ciągłość danych <span style="display:block; color:var(--ink-faint);">(timdr_breaks)</span></span>
-        <span class="detail">brak przerw — wszystkie pola obecne <span class="muted">(dług publiczny, stopy, przepływy kapitału, kursy FX, surowce)</span></span>
-        <span class="stat"><span class="pill ok"><span class="dot"></span>0</span></span>
+        <span class="detail" id="risk-timdr-detail">brak przerw — wszystkie pola obecne <span class="muted">(dług publiczny, stopy, przepływy kapitału, kursy FX, surowce)</span></span>
+        <span class="stat"><span class="pill ok" id="risk-timdr-pill"><span class="dot"></span><span id="risk-timdr-count">0</span></span></span>
       </div>
       <div class="risk-row">
         <span class="dim">Redukcja modelu <span style="display:block; color:var(--ink-faint);">(gia_overload)</span></span>
-        <span class="detail">0 pól odrzuconych <span class="muted">— wszystkie pola tej migawki pokrywają się ze zmiennymi sterującymi GIA</span></span>
-        <span class="stat"><span class="pill ok"><span class="dot"></span>0</span></span>
+        <span class="detail" id="risk-gia-detail">0 pól odrzuconych <span class="muted">— wszystkie pola tej migawki pokrywają się ze zmiennymi sterującymi GIA</span></span>
+        <span class="stat"><span class="pill ok" id="risk-gia-pill"><span class="dot"></span><span id="risk-gia-count">0</span></span></span>
       </div>
       <div class="risk-row">
         <span class="dim">Napięcie międzyrynkowe <span style="display:block; color:var(--ink-faint);">(fieldcore_tension)</span></span>
-        <span class="detail">kapitał: ok · waluty: ok · handel: ok · surowce: ok</span>
-        <span class="stat"><span class="pill ok"><span class="dot"></span>4/4</span></span>
+        <span class="detail" id="risk-fieldcore-detail">kapitał: ok · waluty: ok · handel: ok · surowce: ok</span>
+        <span class="stat"><span class="pill ok" id="risk-fieldcore-pill"><span class="dot"></span><span id="risk-fieldcore-count">4/4</span></span></span>
       </div>
       <div class="risk-row">
         <span class="dim">Słabości strukturalne <span style="display:block; color:var(--ink-faint);">(core_nodes_weakness)</span></span>
-        <span class="detail">USA: dług, zmienność polit. · UE: fragmentacja, wolna polityka · Chiny: nieruchomości, kontrola FX</span>
-        <span class="stat"><span class="pill warn"><span class="dot"></span>6</span></span>
+        <span class="detail" id="risk-nodes-detail">USA: dług, zmienność polit. · UE: fragmentacja, wolna polityka · Chiny: nieruchomości, kontrola FX</span>
+        <span class="stat"><span class="pill warn" id="risk-nodes-pill"><span class="dot"></span><span id="risk-nodes-count">6</span></span></span>
       </div>
+    </div>
+    <p class="note" style="margin-top:0.6em;">
+      Tabela przelicza się w przeglądarce po każdej zmianie pola ✎ i po wczytaniu danych na żywo — 1:1 port logiki z <code>GSF/VALIDATOR/validator.py</code> (sprawdzanie obecności pól, nie ich wartości liczbowych — patrz uwaga przy werdykcie wyżej).
+    </p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Zaawansowane <span style="font-weight:400; color:var(--ink-faint);">(wczytaj / edytuj dane jako JSON)</span></h2>
+      <span class="note">nadpisuje dane na żywo, dopóki nie wyczyścisz — zapis lokalnie w przeglądarce</span>
+    </div>
+    <div class="json-panel">
+      <p class="json-panel-intro">
+        Wklej lub wczytaj plik w formacie <code>dashboard/data.json</code> (dokładnie ten, który zapisuje
+        <code>scripts/fetch_gsf_data.py</code>) i użyj go zamiast danych na żywo — np. do przetestowania
+        scenariusza albo wpisania danych z innego źródła. Po kliknięciu „Zastosuj” dashboard, werdykt GSF
+        i tabela RISK przeliczają się od razu, a nadpisanie zostaje zapamiętane w tej przeglądarce, dopóki
+        go nie wyczyścisz.
+      </p>
+      <div class="json-panel-controls">
+        <label class="json-file-label">
+          Wczytaj plik .json
+          <input type="file" id="json-file-input" accept="application/json,.json">
+        </label>
+        <button type="button" id="json-fill-btn" class="json-btn">Wstaw bieżące dane do edycji</button>
+        <button type="button" id="json-apply-btn" class="json-btn json-btn-primary">Zastosuj JSON</button>
+        <button type="button" id="json-clear-btn" class="json-btn json-btn-ghost">Wyczyść nadpisanie</button>
+      </div>
+      <textarea id="json-editor" spellcheck="false" placeholder='{"usa": {"fed_funds_upper": 3.75, "fed_funds_lower": 3.50, "debt_gdp": 122.59, "current_account_busd": -226.8, "brent_usd_bbl": 96.02}, "eu": {"ecb_rate": 2.25, "eur_usd": 1.1603}, "china": {"usd_cny": 6.7191}}'></textarea>
+      <p id="json-editor-status" class="json-editor-status"></p>
     </div>
   </section>
 
@@ -1180,16 +1307,195 @@
         try { localStorage.setItem('gsf_manual_' + key, JSON.stringify(payload)); } catch (e) { /* brak storage */ }
         if (noteEl) noteEl.textContent = 'zapisano ręcznie ' + payload.savedAt;
       });
+      // 'input' (nie 'change') -- werdykt/RISK przeliczaja sie natychmiast
+      // podczas pisania, nie dopiero po opuszczeniu pola.
+      input.addEventListener('input', function () {
+        if (typeof gsfRunAnalysis === 'function') gsfRunAnalysis();
+      });
     });
   }
 
-  function setLiveStatus(isLive, generatedAt) {
+  // ---------------------------------------------------------------
+  // PORT LOGIKI GSF/VALIDATOR/validator.py (+ TIMDR/GIA/FIELDCORE) DO JS
+  // ---------------------------------------------------------------
+  // Cel: zeby edycja pola ✎ albo wczytanie danych na zywo realnie
+  // przeliczaly werdykt/tabele RISK w przegladarce, tak jak zrobilby
+  // to Python validate_gsf() -- nie tylko zapisywaly wpisana liczbe.
+  //
+  // WAZNE, ZEBY NIE PRZECENIC TEGO, CO TO ROBI: sam Python
+  // (GSF/VALIDATOR/validator.py + TIMDR/validator_timdr.py +
+  // FIELDCORE/fieldcore_tensor.py) sprawdza tylko, czy dane pole JEST
+  // OBECNE w danych -- nie czy jego WARTOSC jest wysoka czy niska.
+  // "stable" nie znaczy "dobre liczby", znaczy "zaden z 5 pol TIMDR i
+  // 4 rynkow FIELDCORE nie jest pusty". Ten port jest wierny temu 1:1
+  // (sprawdzone recznie przeciw tests/test_validator_smoke.py) -- nie
+  // dodaje progow liczbowych (np. "dlug > 120% = zle"), zeby JS i
+  // Python nie zaczely sie rozjezdzac (patrz duplication-drift w
+  // notatkach projektu). Jedyna realna dzwignia dla usera to
+  // WYCZYSZCZENIE pola ✎ -- wtedy dany fragment modelu staje sie
+  // "nieobecny" i werdykt faktycznie sie pogarsza, dokladnie jak
+  // zrobilby to Python przy brakujacym kluczu w danych.
+  //
+  // MAPOWANIE surowych liczb dashboardu -> plaskiego slownika `data`,
+  // ktorego oczekuje validate_gsf() (patrz KOMPLETNY_MODEL w
+  // tests/test_validator_smoke.py): to mapowanie jest MOJA decyzja
+  // projektowa (Python nie mowi, ktore dashboardowe pole odpowiada
+  // ktoremu kluczowi) -- najbardziej naturalne przypisanie: stopy/dlug/
+  // rachunek biezacy sa brane z KTOREGOKOLWIEK z trzech krajow (USA/UE/
+  // Chiny), bo TIMDR/GIA nie rozrozniaja krajow w ogole. Pole "trade"
+  // (rynek FIELDCORE) nie ma odpowiednika w dashboardzie -- nie
+  // wymyslam fikcyjnego zrodla, zakladam je jako zawsze obecne i mowie
+  // o tym wprost tutaj.
+  function gsfHasVal(v) {
+    return v !== null && v !== undefined && String(v).trim() !== '';
+  }
+
+  function gsfBuildDataDict() {
+    function txt(id) { var el = document.getElementById(id); return el ? el.textContent : ''; }
+    function inp(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+
+    var usaRate = txt('usa-fedfunds'), usaDebt = txt('usa-debtgdp'), usaCa = txt('usa-ca'), usaBrent = txt('fx-brent');
+    var euRate = txt('eu-rate'), eurUsd = txt('fx-eurusd'), usdCny = txt('fx-usdcny');
+    var euDebt = inp('eu-debtgdp-input'), euCa = inp('eu-ca-input');
+    var chinaLpr = inp('china-lpr-input'), chinaDebt = inp('china-debtgdp-input'), chinaCa = inp('china-ca-input');
+
+    var d = {};
+    if (gsfHasVal(usaRate) || gsfHasVal(euRate) || gsfHasVal(chinaLpr)) d.interest_rates = true;
+    if (gsfHasVal(usaDebt) || gsfHasVal(euDebt) || gsfHasVal(chinaDebt)) d.public_debt = true;
+    if (gsfHasVal(usaCa) || gsfHasVal(euCa) || gsfHasVal(chinaCa)) d.capital_flows = true;
+    if (gsfHasVal(eurUsd) || gsfHasVal(usdCny)) d.fx_rates = true;
+    if (gsfHasVal(usaBrent)) d.commodities = true;
+    if (d.capital_flows) d.capital = true;
+    if (d.fx_rates) d.fx = true;
+    d.trade = true; // brak wlasnego zrodla w dashboardzie -- patrz komentarz wyzej
+    return d;
+  }
+
+  function gsfValidate(data) {
+    var TIMDR_FIELDS = ['public_debt', 'interest_rates', 'capital_flows', 'fx_rates', 'commodities'];
+    var GIA_CORE = TIMDR_FIELDS;
+    var FIELDCORE_MATRIX = {
+      capital: ['fx', 'trade'],
+      fx: ['capital', 'commodities'],
+      trade: ['capital', 'commodities'],
+      commodities: ['fx', 'trade']
+    };
+    // core_nodes_weakness jest STATYCZNY w Pythonie -- nie zalezy od
+    // `data` w ogole (load_core_nodes() zawsze czyta ten sam
+    // nodes.json). Port wierny temu: nie przelicza sie z pol ✎.
+    var CORE_NODES_WEAKNESS = {
+      'USA': ['dług publiczny', 'zmienność polityczna'],
+      'UE': ['fragmentacja', 'wolna reakcja polityczna'],
+      'Chiny': ['ryzyko nieruchomości', 'kontrola FX']
+    };
+
+    var timdrProblems = [];
+    TIMDR_FIELDS.forEach(function (f) {
+      if (!(f in data)) timdrProblems.push("Brakuje pola „" + f + "” — ciągłość informacji finansowej jest przerwana.");
+    });
+    var timdr = {
+      status: timdrProblems.length ? 'warning' : 'ok',
+      problems: timdrProblems.length ? timdrProblems : ['Ciągłość podstawowych pól wygląda na zachowaną.']
+    };
+
+    var discarded = Object.keys(data).filter(function (k) { return GIA_CORE.indexOf(k) === -1; });
+    var gia = { status: 'ok', discarded_fields: discarded };
+
+    var markets = {}, fieldProblems = [];
+    Object.keys(FIELDCORE_MATRIX).forEach(function (m) {
+      var present = m in data;
+      markets[m] = { status: present ? 'ok' : 'missing_data' };
+      if (!present) fieldProblems.push("Brakuje pola „" + m + "” — tensor wpływów jest niekompletny.");
+    });
+    var fieldcore = { status: fieldProblems.length ? 'warning' : 'ok', markets: markets };
+
+    var structureReport = {
+      timdr_breaks: timdr.status === 'warning' ? timdr.problems : [],
+      gia_overload: gia.discarded_fields,
+      fieldcore_tension: {},
+      core_nodes_weakness: CORE_NODES_WEAKNESS
+    };
+    Object.keys(markets).forEach(function (m) { structureReport.fieldcore_tension[m] = markets[m].status; });
+
+    var LEVELS = ['stable', 'stressed', 'critical'];
+    var nProblems = (timdr.status === 'warning' ? 1 : 0) + (fieldcore.status === 'warning' ? 1 : 0);
+    var level = LEVELS[nProblems];
+
+    return { timdr: timdr, gia: gia, fieldcore: fieldcore, level: level, risk_profile: structureReport };
+  }
+
+  function gsfRunAnalysis() {
+    var result = gsfValidate(gsfBuildDataDict());
+
+    var PL_LEVEL = { stable: 'STABILNY', stressed: 'PODWYŻSZONE NAPIĘCIE', critical: 'KRYTYCZNY' };
+    var CLASS_LEVEL = { stable: 'ok', stressed: 'warn', critical: 'critical' };
+    var pill = document.getElementById('verdict-pill');
+    var label = document.getElementById('verdict-label');
+    var levelEl = document.getElementById('verdict-level');
+    var noteEl = document.getElementById('verdict-recompute-note');
+    if (pill && label && levelEl) {
+      pill.className = 'pill ' + (CLASS_LEVEL[result.level] || 'ok');
+      label.textContent = PL_LEVEL[result.level] || result.level;
+      levelEl.textContent = result.level;
+    }
+    if (noteEl) {
+      noteEl.textContent = 'Przeliczono w przeglądarce z aktualnych danych i pól ✎ (port GSF/VALIDATOR/validator.py) — ' + new Date().toLocaleTimeString('pl-PL') + '.';
+    }
+
+    var timdrDetail = document.getElementById('risk-timdr-detail');
+    var timdrPill = document.getElementById('risk-timdr-pill');
+    var timdrCount = document.getElementById('risk-timdr-count');
+    if (timdrDetail && timdrPill && timdrCount) {
+      var tCount = result.risk_profile.timdr_breaks.length;
+      timdrDetail.textContent = tCount
+        ? result.risk_profile.timdr_breaks.join(' ')
+        : 'brak przerw — wszystkie pola obecne (dług publiczny, stopy, przepływy kapitału, kursy FX, surowce)';
+      timdrPill.className = 'pill ' + (tCount ? 'warn' : 'ok');
+      timdrCount.textContent = String(tCount);
+    }
+
+    var giaDetail = document.getElementById('risk-gia-detail');
+    var giaPill = document.getElementById('risk-gia-pill');
+    var giaCount = document.getElementById('risk-gia-count');
+    if (giaDetail && giaPill && giaCount) {
+      var gCount = result.risk_profile.gia_overload.length;
+      giaDetail.textContent = gCount
+        ? gCount + ' pól odrzuconych: ' + result.risk_profile.gia_overload.join(', ')
+        : '0 pól odrzuconych — wszystkie pola tej migawki pokrywają się ze zmiennymi sterującymi GIA';
+      giaPill.className = 'pill ' + (gCount ? 'warn' : 'ok');
+      giaCount.textContent = String(gCount);
+    }
+
+    var fcDetail = document.getElementById('risk-fieldcore-detail');
+    var fcPill = document.getElementById('risk-fieldcore-pill');
+    var fcCount = document.getElementById('risk-fieldcore-count');
+    if (fcDetail && fcPill && fcCount) {
+      var PL_MARKET = { capital: 'kapitał', fx: 'waluty', trade: 'handel', commodities: 'surowce' };
+      var order = ['capital', 'fx', 'trade', 'commodities'];
+      var ok = 0;
+      var parts = order.map(function (m) {
+        var st = result.risk_profile.fieldcore_tension[m];
+        if (st === 'ok') ok++;
+        return PL_MARKET[m] + ': ' + (st === 'ok' ? 'ok' : 'brak danych');
+      });
+      fcDetail.textContent = parts.join(' · ');
+      fcPill.className = 'pill ' + (ok === order.length ? 'ok' : 'warn');
+      fcCount.textContent = ok + '/' + order.length;
+    }
+
+    return result;
+  }
+
+  function setLiveStatus(mode, meta) {
     var el = document.getElementById('live-status');
     var txt = document.getElementById('live-status-text');
     if (!el || !txt) return;
-    if (isLive) {
+    if (mode === 'override') {
+      el.className = 'live-status is-override';
+      txt.textContent = 'dane nadpisane ręcznie (JSON) · zapisano ' + (meta || '');
+    } else if (mode) {
       el.className = 'live-status is-live';
-      var d = generatedAt ? new Date(generatedAt) : null;
+      var d = meta ? new Date(meta) : null;
       txt.textContent = 'dane na żywo (data.json) · ' + (d ? d.toLocaleString('pl-PL') : 'brak znacznika czasu');
     } else {
       el.className = 'live-status is-fallback';
@@ -1197,17 +1503,147 @@
     }
   }
 
-  initManualFields();
+  // ---------------------------------------------------------------
+  // Panel "Zaawansowane" -- reczne wczytywanie/edycja JSON, nadpisujace
+  // dane na zywo. Format identyczny jak dashboard/data.json (ten sam,
+  // ktory produkuje scripts/fetch_gsf_data.py) -- zeby nadpisanie dalo
+  // sie ponownie wczytac jako prawdziwy plik danych, nie prywatny format.
+  // ---------------------------------------------------------------
+  var GSF_OVERRIDE_KEY = 'gsf_json_override';
 
-  fetch('data.json', { cache: 'no-store' })
-    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(function (data) {
-      renderLive(data);
-      setLiveStatus(true, data.generated_at);
-    })
-    .catch(function () {
-      setLiveStatus(false, null);
-    });
+  // Szkielet do wstawienia w edytor, gdy jeszcze nie bylo zadnego
+  // udanego fetch()a danych na zywo -- sama struktura/klucze
+  // data.json, zeby user mial od czego zaczac zamiast pustego pola.
+  var GSF_JSON_SKELETON = {
+    generated_at: new Date().toISOString(),
+    generator: "recznie wpisane w dashboardzie",
+    usa: {
+      fed_funds_upper: 3.75, fed_funds_lower: 3.50, fed_funds_date: "2026-09-03",
+      debt_gdp: 122.59, debt_gdp_date: "2026-Q1",
+      current_account_busd: -226.828, current_account_date: "2026-Q1",
+      brent_usd_bbl: 96.02
+    },
+    eu: { ecb_rate: 2.25, ecb_rate_date: "2026-09-03", eur_usd: 1.1603 },
+    china: { usd_cny: 6.7191 }
+  };
+
+  function gsfFetchLiveData() {
+    fetch('data.json', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (data) {
+        window.gsfLastLiveData = data;
+        renderLive(data);
+        setLiveStatus(true, data.generated_at);
+        gsfRunAnalysis();
+      })
+      .catch(function () {
+        setLiveStatus(false, null);
+      });
+  }
+
+  function gsfApplyJsonOverride() {
+    var ta = document.getElementById('json-editor');
+    var status = document.getElementById('json-editor-status');
+    if (!ta) return;
+    var raw = ta.value.trim();
+    if (!raw) {
+      if (status) { status.textContent = 'Puste pole — nic do zastosowania.'; status.className = 'json-editor-status'; }
+      return;
+    }
+    var parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (e) {
+      if (status) { status.textContent = 'Błąd w JSON: ' + e.message; status.className = 'json-editor-status is-error'; }
+      return;
+    }
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      if (status) { status.textContent = 'JSON musi być obiektem (jak dashboard/data.json), nie listą ani wartością prostą.'; status.className = 'json-editor-status is-error'; }
+      return;
+    }
+    renderLive(parsed);
+    var payload = { data: parsed, savedAt: new Date().toLocaleString('pl-PL') };
+    try { localStorage.setItem(GSF_OVERRIDE_KEY, JSON.stringify(payload)); } catch (e) { /* brak storage */ }
+    setLiveStatus('override', payload.savedAt);
+    gsfRunAnalysis();
+    if (status) {
+      status.textContent = 'Zastosowano i zapisano w tej przeglądarce (' + payload.savedAt + '). Nadpisuje dane na żywo, dopóki nie klikniesz „Wyczyść nadpisanie”.';
+      status.className = 'json-editor-status is-ok';
+    }
+  }
+
+  function gsfInitJsonPanel() {
+    var fileInput = document.getElementById('json-file-input');
+    var fillBtn = document.getElementById('json-fill-btn');
+    var applyBtn = document.getElementById('json-apply-btn');
+    var clearBtn = document.getElementById('json-clear-btn');
+    var ta = document.getElementById('json-editor');
+    var status = document.getElementById('json-editor-status');
+
+    if (fileInput) {
+      fileInput.addEventListener('change', function () {
+        var file = fileInput.files && fileInput.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function () {
+          if (ta) ta.value = String(reader.result);
+          if (status) { status.textContent = 'Wczytano plik „' + file.name + '” do edytora — sprawdź i kliknij „Zastosuj JSON”.'; status.className = 'json-editor-status'; }
+        };
+        reader.onerror = function () {
+          if (status) { status.textContent = 'Nie udało się wczytać pliku.'; status.className = 'json-editor-status is-error'; }
+        };
+        reader.readAsText(file);
+        fileInput.value = ''; // pozwala wczytac ten sam plik ponownie pod rzad
+      });
+    }
+    if (fillBtn) {
+      fillBtn.addEventListener('click', function () {
+        if (!ta) return;
+        var base = window.gsfLastLiveData || GSF_JSON_SKELETON;
+        ta.value = JSON.stringify(base, null, 2);
+        if (status) {
+          status.textContent = window.gsfLastLiveData
+            ? 'Wstawiono ostatnie wczytane dane na żywo — edytuj i kliknij „Zastosuj JSON”.'
+            : 'Brak jeszcze danych na żywo — wstawiono przykładowy szkielet do edycji.';
+          status.className = 'json-editor-status';
+        }
+      });
+    }
+    if (applyBtn) applyBtn.addEventListener('click', gsfApplyJsonOverride);
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        try { localStorage.removeItem(GSF_OVERRIDE_KEY); } catch (e) { /* brak storage */ }
+        if (ta) ta.value = '';
+        if (status) { status.textContent = 'Nadpisanie usunięte — wracam do danych na żywo / statycznych.'; status.className = 'json-editor-status'; }
+        gsfFetchLiveData();
+      });
+    }
+  }
+
+  function gsfInitOverrideOrFetch() {
+    var stored = null;
+    try { stored = localStorage.getItem(GSF_OVERRIDE_KEY); } catch (e) { /* prywatne okno itp. */ }
+    if (stored) {
+      try {
+        var payload = JSON.parse(stored);
+        var ta = document.getElementById('json-editor');
+        if (ta) ta.value = JSON.stringify(payload.data, null, 2);
+        window.gsfLastLiveData = payload.data;
+        renderLive(payload.data);
+        setLiveStatus('override', payload.savedAt);
+        gsfRunAnalysis();
+        var status = document.getElementById('json-editor-status');
+        if (status) { status.textContent = 'Aktywne zapisane nadpisanie z ' + payload.savedAt + '.'; status.className = 'json-editor-status is-ok'; }
+        return; // override ma pierwszenstwo -- nie pobieraj danych na zywo, dopoki go nie wyczyscisz
+      } catch (e) { /* uszkodzony zapis w localStorage -- ignoruj, spadnij do zwyklego fetch */ }
+    }
+    gsfFetchLiveData();
+  }
+
+  initManualFields();
+  gsfInitJsonPanel();
+  gsfRunAnalysis(); // pierwsze przeliczenie -- na statycznych wartosciach z HTML, zanim/gdyby fetch/override sie zaladowal
+  gsfInitOverrideOrFetch();
 })();
 </script>
 </body>

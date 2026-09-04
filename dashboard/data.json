@@ -1,42 +1,27 @@
 {
-  "generated_at": "2026-09-04T12:00:00+00:00",
-  "generator": "reczny research w tej sesji (fetch_gsf_data.py jeszcze nieuruchomiony)",
+  "generated_at": "2026-09-04T11:43:06.768919+00:00",
+  "generator": "scripts/fetch_gsf_data.py",
   "usa": {
     "fed_funds_upper": 3.75,
-    "fed_funds_lower": 3.50,
-    "fed_funds_date": "2026-09-03",
+    "fed_funds_lower": 3.5,
+    "fed_funds_date": null,
+    "fed_funds_source": "fallback",
     "debt_gdp": 122.59,
-    "debt_gdp_date": "2026-Q1",
-    "debt_gdp_trend": {
-      "method": "naive_linear_extrapolation",
-      "n": 5,
-      "note": "recznie policzone z 5 ostatnich kwartalow FRED GFDEGDQ188S (Q1 2025 - Q1 2026): 120.55, 118.78, 121.03, 122.57, 122.59",
-      "slope_per_step": 0.79,
-      "next_step_estimate": 123.47
-    },
+    "debt_gdp_source": "fallback",
     "current_account_busd": -226.828,
-    "current_account_date": "2026-Q1",
-    "current_account_trend": {
-      "method": "naive_linear_extrapolation",
-      "n": 5,
-      "note": "recznie policzone z 5 ostatnich kwartalow FRED IEABC (mld USD, Q1 2025 - Q1 2026): -438.24, -254.89, -262.87, -221.07, -226.83 -- silny wplyw odstajacego Q1 2025 na nachylenie, patrz next_step_estimate",
-      "slope_per_step": 45.66,
-      "next_step_estimate": -143.78
-    },
+    "current_account_source": "fallback",
     "brent_usd_bbl": 96.02,
-    "brent_date": "2026-09-01",
-    "brent_trend": {
-      "method": "insufficient_data",
-      "note": "seed reczny mial za malo czystych, rownomiernie rozlozonych punktow dziennych (FRED czasem publikuje '.' dla dnia bez notowania) -- fetch_gsf_data.py policzy to z 30 pelnych obserwacji przy pierwszym realnym uruchomieniu"
-    }
+    "brent_source": "fallback"
   },
   "eu": {
     "ecb_rate": 2.25,
-    "ecb_rate_date": "2026-09-03",
-    "eur_usd": 1.1603
+    "ecb_rate_source": "fallback",
+    "eur_usd": 1.1603,
+    "eur_usd_source": "fallback"
   },
   "china": {
-    "usd_cny": 6.7191
+    "usd_cny": 6.7191,
+    "usd_cny_source": "fallback"
   },
   "manual_defaults": {
     "china_lpr_1y": "3,0%",
