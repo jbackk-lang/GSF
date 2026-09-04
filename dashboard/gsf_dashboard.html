@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GSF — Migawka Pola</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #f2f5f7;
+    --bg-elevated: #ffffff;
+    --bg-sunken: #e8edf1;
+    --ink: #1a2129;
+    --ink-muted: #5c6875;
+    --ink-faint: #8894a1;
+    --border: #d7dfe6;
+    --border-soft: #e6ebef;
+    --accent: #1c6b73;
+    --accent-ink: #ffffff;
+    --accent-soft: #dcedec;
+    --warm: #b1552e;
+    --warm-soft: #f4e3da;
+    --ok: #2f8558;
+    --ok-soft: #e0f0e6;
+    --warn: #b3791d;
+    --warn-soft: #f6ead2;
+    --critical: #b23d33;
+    --critical-soft: #f6dfdc;
+    --shadow: 0 1px 2px rgba(20, 30, 40, 0.06), 0 6px 20px -8px rgba(20, 30, 40, 0.12);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10151a;
+      --bg-elevated: #171e25;
+      --bg-sunken: #0c1115;
+      --ink: #e9edf1;
+      --ink-muted: #9aa7b3;
+      --ink-faint: #6d7986;
+      --border: #2b343c;
+      --border-soft: #232b32;
+      --accent: #56b8ae;
+      --accent-ink: #08201d;
+      --accent-soft: #16302d;
+      --warm: #e0895b;
+      --warm-soft: #33241b;
+      --ok: #63c98e;
+      --ok-soft: #17301f;
+      --warn: #e2b25a;
+      --warn-soft: #362a11;
+      --critical: #e17a70;
+      --critical-soft: #351f1c;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #10151a;
+    --bg-elevated: #171e25;
+    --bg-sunken: #0c1115;
+    --ink: #e9edf1;
+    --ink-muted: #9aa7b3;
+    --ink-faint: #6d7986;
+    --border: #2b343c;
+    --border-soft: #232b32;
+    --accent: #56b8ae;
+    --accent-ink: #08201d;
+    --accent-soft: #16302d;
+    --warm: #e0895b;
+    --warm-soft: #33241b;
+    --ok: #63c98e;
+    --ok-soft: #17301f;
+    --warn: #e2b25a;
+    --warn-soft: #362a11;
+    --critical: #e17a70;
+    --critical-soft: #351f1c;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Barlow Condensed', system-ui, sans-serif;
+    font-weight: 700;
+    text-wrap: balance;
+    letter-spacing: 0.01em;
+  }
+
+  .num {
+    font-family: 'IBM Plex Mono', 'IBM Plex Sans', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  a { color: var(--accent); }
+
+  /* ---------- header ---------- */
+  header.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 6px;
+  }
+
+  header.top h1 {
+    font-size: 40px;
+    line-height: 1.02;
+    margin: 0;
+  }
+
+  header.top .sub {
+    color: var(--ink-muted);
+    font-size: 14.5px;
+    max-width: 46ch;
+    margin-top: 6px;
+  }
+
+  .stamp {
+    text-align: right;
+    font-size: 13px;
+    color: var(--ink-faint);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .stamp strong { color: var(--ink); font-weight: 500; }
+
+  .live-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .live-status .dot2 { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-faint); }
+  .live-status.is-live .dot2 { background: var(--ok); }
+  .live-status.is-fallback .dot2 { background: var(--warn); }
+
+  .trend-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    white-space: nowrap;
+  }
+  .trend-chip.up { background: var(--warm-soft); color: var(--warm); }
+  .trend-chip.down { background: var(--ok-soft); color: var(--ok); }
+  .trend-chip.flat { background: var(--border-soft); color: var(--ink-faint); }
+
+  .editable-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .editable-field input {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: right;
+    color: var(--ink);
+    background: var(--bg-sunken);
+    border: 1px solid var(--border-soft);
+    border-radius: 5px;
+    padding: 2px 6px;
+    width: 130px;
+  }
+  .editable-field input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .editable-field .edit-note {
+    font-size: 9.5px;
+    color: var(--ink-faint);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .metric-row.editable .lbl::after {
+    content: " ✎";
+    color: var(--ink-faint);
+    font-size: 10px;
+  }
+
+  /* ---------- verdict strip ---------- */
+  .verdict {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 20px;
+    align-items: center;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    box-shadow: var(--shadow);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px 7px 10px;
+    border-radius: 100px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .pill.ok { background: var(--ok-soft); color: var(--ok); }
+  .pill.ok .dot { background: var(--ok); }
+  .pill.warn { background: var(--warn-soft); color: var(--warn); }
+  .pill.warn .dot { background: var(--warn); }
+  .pill.critical { background: var(--critical-soft); color: var(--critical); }
+  .pill.critical .dot { background: var(--critical); }
+
+  .verdict .caveat {
+    font-size: 13.5px;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+  .verdict .caveat b { color: var(--ink); font-weight: 600; }
+
+  .verdict .real-note {
+    text-align: right;
+    font-size: 13px;
+    max-width: 220px;
+  }
+  .verdict .real-note .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--warm);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ---------- field map (grid deformation) ---------- */
+  .fieldmap-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px 14px;
+    box-shadow: var(--shadow);
+  }
+  .fieldmap-canvas-box {
+    position: relative;
+  }
+  .fieldmap-card canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 6px;
+    background: var(--bg-sunken);
+  }
+  .node-menu {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 5px 7px;
+    box-shadow: var(--shadow);
+    min-width: 118px;
+  }
+  .node-menu .country {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+  }
+  .node-menu select {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 11.5px;
+    color: var(--ink);
+    background: var(--bg-sunken);
+    border: 1px solid var(--border-soft);
+    border-radius: 5px;
+    padding: 2px 4px;
+    width: 100%;
+  }
+  .node-menu output {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .node-menu::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--border);
+  }
+  .fieldmap-caption {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--ink-faint);
+    line-height: 1.5;
+  }
+  .fieldmap-caption b { color: var(--ink-muted); font-weight: 500; }
+
+  /* ---------- section headers ---------- */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .section-head h2 {
+    font-size: 26px;
+    margin: 0;
+  }
+  .section-head .note {
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ---------- core nodes ---------- */
+  .nodes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .node-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 18px 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .node-card .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .node-card .head h3 {
+    font-size: 22px;
+    margin: 0;
+  }
+  .node-card .flag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    border: 1px solid var(--border-soft);
+    padding: 2px 7px;
+    border-radius: 5px;
+  }
+
+  .metric-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 10px;
+    padding: 8px 0;
+    border-top: 1px solid var(--border-soft);
+    align-items: baseline;
+  }
+  .metric-row:first-of-type { border-top: none; padding-top: 0; }
+  .metric-row .lbl {
+    font-size: 12.5px;
+    color: var(--ink-muted);
+  }
+  .metric-row .val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: right;
+  }
+  .metric-row .ctx {
+    grid-column: 1 / -1;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+  }
+
+  .swtags {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 4px;
+    border-top: 1px dashed var(--border-soft);
+  }
+  .swtags .swrow {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .swtags .swlabel {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    width: 62px;
+    flex: none;
+    color: var(--ink-faint);
+  }
+  .tag {
+    font-size: 11.5px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  .tag.s { background: var(--ok-soft); color: var(--ok); }
+  .tag.w { background: var(--critical-soft); color: var(--critical); }
+
+  /* ---------- fieldcore tensor ---------- */
+  .tensor-wrap {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .tensor-wrap { grid-template-columns: 1fr; }
+  }
+
+  .tensor-svg-box svg { width: 100%; height: auto; display: block; }
+
+  .market-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .market-item {
+    display: grid;
+    grid-template-columns: 14px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    background: var(--bg-sunken);
+  }
+  .market-item .swatch { width: 10px; height: 10px; border-radius: 3px; }
+  .market-item .name { font-size: 13.5px; font-weight: 500; }
+  .market-item .datum { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--ink-muted); text-align: right; }
+  .market-item .status-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+  }
+
+  /* ---------- reading panel ---------- */
+  .reading {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 860px) { .reading { grid-template-columns: 1fr; } }
+
+  .read-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .read-card h3 {
+    font-size: 20px;
+    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .read-card h3 .chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  .chip.real { background: var(--warm-soft); color: var(--warm); }
+  .chip.model { background: var(--accent-soft); color: var(--accent); }
+
+  .read-card ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .read-card li { font-size: 13.5px; color: var(--ink); }
+  .read-card li b { font-weight: 600; }
+  .read-card li .sub { color: var(--ink-muted); font-size: 12.5px; }
+
+  /* ---------- risk table ---------- */
+  .risk-table {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .risk-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 90px;
+    gap: 14px;
+    align-items: center;
+    padding: 13px 20px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .risk-row:first-child { border-top: none; }
+  .risk-row .dim {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-muted);
+  }
+  .risk-row .detail { font-size: 13px; color: var(--ink); }
+  .risk-row .detail .muted { color: var(--ink-faint); }
+  .risk-row .stat { text-align: right; }
+
+  /* ---------- footer / sources ---------- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+    font-size: 12px;
+    color: var(--ink-faint);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  footer .srcs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+  footer a { color: var(--ink-muted); text-decoration: none; border-bottom: 1px dotted var(--border); }
+  footer a:hover { color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <p class="eyebrow">GSF · Globalny System Finansowy</p>
+      <h1>Migawka pola finansowego</h1>
+      <p class="sub">Rdzenie USA–UE–Chiny, tensor FIELDCORE i werdykt strukturalny GSF, obok realnych wskaźników makro w standardowym ujęciu ekonomicznym.</p>
+    </div>
+    <div class="stamp">
+      <span id="live-status" class="live-status"><span class="dot2"></span><span id="live-status-text">sprawdzam dane…</span></span>
+      <span>model: GSF <span class="num">v0.2</span> (core_nodes, po naprawie)</span>
+      <span>pola ✎ = edytowalne ręcznie, zapis w przeglądarce</span>
+    </div>
+  </header>
+
+  <section class="verdict">
+    <span class="pill ok"><span class="dot"></span>STABILNY <span style="opacity:0.65;">(GSF: stable)</span></span>
+    <p class="caveat">
+      <b>To nie jest ocena ryzyka rynkowego.</b> GSF liczy „stable”, bo w tej migawce
+      żadne z pięciu pól TIMDR i żaden z czterech rynków FIELDCORE nie jest pusty —
+      sam fakt kompletności danych, nie ich poziom. Dług USA na 122% PKB czy ropa
+      o 45% droższa r/r <em>nie</em> wchodzą jeszcze do tego werdyktu — patrz „Jak
+      to czyta ekonomista” obok modelu GSF niżej.
+    </p>
+    <div class="real-note">
+      <span class="label">Poza modelem</span>
+      3 z 4 rdzeni wykazują podwyższone napięcie w standardowym odczycie makro
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Mapa napięć makroekonomicznych <span style="font-weight:400; color:var(--ink-faint);">(deformacja pola)</span></h2>
+      <span class="note">schematyczna, nie kartograficzna</span>
+    </div>
+    <div class="fieldmap-card">
+      <div class="fieldmap-canvas-box">
+        <canvas id="fieldMap" width="900" height="430" role="img" aria-label="Schematyczna siatka pola, ugięta wokół trzech rdzeni (USA, UE, Chiny) ułożonych w trójkąt zależności, z bokami o grubości proporcjonalnej do napięcia i kulami o rozmiarze proporcjonalnym do długu publicznego względem PKB"></canvas>
+
+        <div class="node-menu" style="left:25.6%; top:60.0%;">
+          <span class="country">USA</span>
+          <select data-node="usa" aria-label="Wybierz wskaźnik dla USA">
+            <option value="rate">Stopa Fed</option>
+            <option value="debt" selected>Dług / PKB</option>
+            <option value="ca">Rachunek bieżący</option>
+            <option value="oil">Ropa Brent</option>
+          </select>
+          <output data-out="usa">122,6% PKB</output>
+        </div>
+
+        <div class="node-menu" style="left:50.0%; top:15.8%;">
+          <span class="country">UE</span>
+          <select data-node="eu" aria-label="Wybierz wskaźnik dla UE">
+            <option value="rate">Stopa EBC</option>
+            <option value="debt" selected>Dług / PKB</option>
+            <option value="ca">Rachunek bieżący</option>
+            <option value="fx">EUR/USD</option>
+          </select>
+          <output data-out="eu">88,1% PKB</output>
+        </div>
+
+        <div class="node-menu" style="left:74.4%; top:60.0%;">
+          <span class="country">Chiny</span>
+          <select data-node="china" aria-label="Wybierz wskaźnik dla Chin">
+            <option value="rate">LPR 1‑roczna</option>
+            <option value="debt" selected>Dług / PKB</option>
+            <option value="ca">Rachunek bieżący</option>
+            <option value="fx">USD/CNY</option>
+          </select>
+          <output data-out="china">~90,0% PKB</output>
+        </div>
+      </div>
+      <p class="fieldmap-caption">
+        Trzy rdzenie pola (USA, UE, Chiny) ułożone w <b>trójkąt zależności</b>, nie wg
+        realnej geografii — boki trójkąta to powiązania między rdzeniami, grubość
+        ∝ łączne napięcie obu końców. <b>Głębokość ugięcia siatki i rozmiar kuli</b>
+        ∝ dług publiczny / PKB, znormalizowane do USA = 1,0 (USA 122,6% · Chiny
+        ~90,0% → 0,73 · UE 88,1% → 0,72). W pełni schematyczne — nie mapa
+        nawigacyjna, nie realne odległości.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Kluczowe gospodarki świata <span style="font-weight:400; color:var(--ink-faint);">(rdzenie pola — CORE‑NODES)</span></h2>
+      <span class="note">mocne/słabe strony: core_nodes/nodes.json (statyczne) · dane: patrz źródła</span>
+    </div>
+    <div class="nodes">
+
+      <div class="node-card">
+        <div class="head"><h3>USA</h3><span class="flag">rdzeń 1/3</span></div>
+        <div class="metric-row">
+          <span class="lbl">Stopa Fed (funds rate)</span>
+          <span class="val" id="usa-fedfunds">3,50–3,75%</span>
+          <span class="ctx" id="usa-fedfunds-date">niezmieniona od czerwca 2026, kolejne FOMC 15–16.09</span>
+        </div>
+        <div class="metric-row">
+          <span class="lbl">Dług publiczny / PKB</span>
+          <span class="val" id="usa-debtgdp">122,6% <span id="usa-debtgdp-trend"></span></span>
+          <span class="ctx" id="usa-debtgdp-date">Q1 2026 — pierwszy raz &gt;100% od końca II wojny św.</span>
+        </div>
+        <div class="metric-row">
+          <span class="lbl">Rachunek bieżący</span>
+          <span class="val" id="usa-ca">−226,8 mld USD <span id="usa-ca-trend"></span></span>
+          <span class="ctx" id="usa-ca-date">Q1 2026, deficyt pogłębia się (Q4 2025: −221,1 mld)</span>
+        </div>
+        <div class="swtags">
+          <div class="swrow"><span class="swlabel">mocne</span><span class="tag s">dominacja USD</span><span class="tag s">głębokość rynku obligacji</span></div>
+          <div class="swrow"><span class="swlabel">słabe</span><span class="tag w">dług publiczny</span><span class="tag w">zmienność polityczna</span></div>
+        </div>
+      </div>
+
+      <div class="node-card">
+        <div class="head"><h3>UE</h3><span class="flag">rdzeń 2/3</span></div>
+        <div class="metric-row">
+          <span class="lbl">Stopa depozytowa EBC</span>
+          <span class="val" id="eu-rate">2,25%</span>
+          <span class="ctx" id="eu-rate-date">FRED (ECBDFR), stan na 3.09.2026</span>
+        </div>
+        <div class="metric-row editable">
+          <span class="lbl">Dług publiczny / PKB</span>
+          <div class="editable-field">
+            <input type="text" id="eu-debtgdp-input" data-manual="eu_debt_gdp" value="88,1% PKB">
+            <span class="edit-note" id="eu-debtgdp-note">brak wolnego API — wpisz ręcznie</span>
+          </div>
+        </div>
+        <div class="metric-row editable">
+          <span class="lbl">Rachunek bieżący</span>
+          <div class="editable-field">
+            <input type="text" id="eu-ca-input" data-manual="eu_current_account" value="+261,4 mld EUR (2025)">
+            <span class="edit-note" id="eu-ca-note">brak wolnego API — wpisz ręcznie</span>
+          </div>
+        </div>
+        <div class="swtags">
+          <div class="swrow"><span class="swlabel">mocne</span><span class="tag s">wolumen handlu</span><span class="tag s">skala bankowa</span></div>
+          <div class="swrow"><span class="swlabel">słabe</span><span class="tag w">fragmentacja</span><span class="tag w">wolna reakcja polityczna</span></div>
+        </div>
+      </div>
+
+      <div class="node-card">
+        <div class="head"><h3>Chiny</h3><span class="flag">rdzeń 3/3</span></div>
+        <div class="metric-row editable">
+          <span class="lbl">LPR 1‑roczna / 5‑letnia</span>
+          <div class="editable-field">
+            <input type="text" id="china-lpr-input" data-manual="china_lpr" value="3,0% / 3,5%">
+            <span class="edit-note" id="china-lpr-note">brak wolnego API — wpisz ręcznie</span>
+          </div>
+        </div>
+        <div class="metric-row editable">
+          <span class="lbl">Dług publiczny / PKB</span>
+          <div class="editable-field">
+            <input type="text" id="china-debtgdp-input" data-manual="china_debt_gdp" value="~90,0% PKB">
+            <span class="edit-note" id="china-debtgdp-note">brak wolnego API — wpisz ręcznie</span>
+          </div>
+        </div>
+        <div class="metric-row editable">
+          <span class="lbl">Rachunek bieżący</span>
+          <div class="editable-field">
+            <input type="text" id="china-ca-input" data-manual="china_current_account" value="+184,3 mld USD (Q1 2026)">
+            <span class="edit-note" id="china-ca-note">brak wolnego API — wpisz ręcznie</span>
+          </div>
+        </div>
+        <div class="swtags">
+          <div class="swrow"><span class="swlabel">mocne</span><span class="tag s">rdzeń przemysłowy</span><span class="tag s">wpływ na surowce</span></div>
+          <div class="swrow"><span class="swlabel">słabe</span><span class="tag w">ryzyko nieruchomości</span><span class="tag w">kontrola FX</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Powiązania międzyrynkowe <span style="font-weight:400; color:var(--ink-faint);">(tensor wpływów — FIELDCORE)</span></h2>
+      <span class="note">macierz powiązań: fieldcore_map.json · 4/4 rynki obsadzone danymi</span>
+    </div>
+    <div class="tensor-wrap">
+      <div class="tensor-svg-box">
+        <svg viewBox="0 0 420 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Graf wpływów między czterema rynkami FIELDCORE">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-faint)"></path>
+            </marker>
+          </defs>
+          <!-- edges per influence_matrix: capital<->fx, capital<->trade, fx<->commodities, trade<->commodities -->
+          <line x1="120" y1="70" x2="300" y2="70" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"></line>
+          <line x1="120" y1="70" x2="120" y2="270" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"></line>
+          <line x1="300" y1="70" x2="300" y2="270" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"></line>
+          <line x1="120" y1="270" x2="300" y2="270" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"></line>
+
+          <!-- capital -->
+          <g>
+            <circle cx="120" cy="70" r="42" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"></circle>
+            <text x="120" y="65" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="var(--ink)">kapitał</text>
+            <text x="120" y="82" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
+          </g>
+          <!-- fx -->
+          <g>
+            <circle cx="300" cy="70" r="42" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"></circle>
+            <text x="300" y="65" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="var(--ink)">waluty</text>
+            <text x="300" y="82" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
+          </g>
+          <!-- trade -->
+          <g>
+            <circle cx="120" cy="270" r="42" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"></circle>
+            <text x="120" y="265" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" font-weight="600" fill="var(--ink)">handel</text>
+            <text x="120" y="282" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
+          </g>
+          <!-- commodities -->
+          <g>
+            <circle cx="300" cy="270" r="42" fill="var(--warm-soft)" stroke="var(--warm)" stroke-width="1.5"></circle>
+            <text x="300" y="263" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12.5" font-weight="600" fill="var(--ink)">surowce</text>
+            <text x="300" y="280" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ok)">● ok</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="market-list">
+        <div class="market-item">
+          <span class="swatch" style="background:var(--accent)"></span>
+          <span class="name">Kapitał <span style="color:var(--ink-faint); font-weight:400;">(capital)</span> <span class="status-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
+          <span class="datum">US CA −226,8 mld · EU CA +261,4 mld · CN CA +184,3 mld</span>
+        </div>
+        <div class="market-item">
+          <span class="swatch" style="background:var(--accent)"></span>
+          <span class="name">Waluty <span style="color:var(--ink-faint); font-weight:400;">(fx)</span> <span class="status-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
+          <span class="datum">EUR/USD <span id="fx-eurusd">1,1603</span> · USD/CNY <span id="fx-usdcny">6,7192</span></span>
+        </div>
+        <div class="market-item">
+          <span class="swatch" style="background:var(--accent)"></span>
+          <span class="name">Handel <span style="color:var(--ink-faint); font-weight:400;">(trade)</span> <span class="status-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
+          <span class="datum">proxy: kierunek rachunku bieżącego (brak osobnego wskaźnika)</span>
+        </div>
+        <div class="market-item">
+          <span class="swatch" style="background:var(--warm)"></span>
+          <span class="name">Surowce <span style="color:var(--ink-faint); font-weight:400;">(commodities)</span> <span class="status-badge" style="background:var(--ok-soft); color:var(--ok);">ok</span></span>
+          <span class="datum">Brent <span id="fx-brent">95,23</span> USD/bbl</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Dwa czytania tej samej migawki</h2>
+    </div>
+    <div class="reading">
+      <div class="read-card">
+        <h3>Jak to czyta ekonomista <span class="chip real">realne dane</span></h3>
+        <ul>
+          <li><b>Dług USA &gt;120% PKB</b> — pierwszy raz od 1946 r. <span class="sub">standardowy sygnał podwyższonego ryzyka fiskalnego, nie neutralny fakt</span></li>
+          <li><b>Ropa +45% r/r</b> — uszkodzone rafinerie (Bliski Wschód, Rosja) <span class="sub">presja inflacyjna z importu, poza kontrolą banków centralnych</span></li>
+          <li><b>Deficyt USA pogłębia się</b> kwartał do kwartału <span class="sub">−226,8 mld vs −221,1 mld — kierunek, nie tylko poziom, ma znaczenie</span></li>
+          <li><b>Nadwyżka strefy euro kurczy się</b> — 412→261 mld EUR r/r <span class="sub">słabnący bufor zewnętrzny UE</span></li>
+          <li><b>Chiny: rekordowa nadwyżka</b> przy stabilnych stopach <span class="sub">kontrast wobec deficytu USA — klasyczna asymetria globalnych przepływów</span></li>
+        </ul>
+      </div>
+      <div class="read-card">
+        <h3>Jak to czyta GSF <span class="chip model">model strukturalny</span></h3>
+        <ul>
+          <li><b>Ciągłość danych: ok</b> <span class="sub">(TIMDR) — 5/5 pól obecnych: dług publiczny, stopy, przepływy kapitału, kursy FX, surowce</span></li>
+          <li><b>Powiązania międzyrynkowe: ok</b> <span class="sub">(FIELDCORE) — 4/4 rynki obsadzone: kapitał, waluty, handel, surowce — bez brakujących węzłów</span></li>
+          <li><b>Rdzenie gospodarek: bez zmian</b> <span class="sub">(core_nodes) — mocne/słabe strony statyczne, nie liczone z powyższych danych, patrz nodes.json</span></li>
+          <li><b>Poziom ryzyka: stabilny</b> <span class="sub">(level: stable) — liczony tylko z kompletności danych, patrz UWAGA O ZAKRESIE w validator.py</span></li>
+          <li><b>Czego GSF (jeszcze) nie robi:</b> nie ocenia, czy 122% PKB albo +45% r/r ropy jest samo w sobie problemem — brak progów istotności</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Profil ryzyka systemowego <span style="font-weight:400; color:var(--ink-faint);">(RISK)</span></h2>
+      <span class="note">risk_map.json → wymiary ryzyka, zbudowane z structure_report w VALIDATOR/validator.py</span>
+    </div>
+    <div class="risk-table">
+      <div class="risk-row">
+        <span class="dim">Ciągłość danych <span style="display:block; color:var(--ink-faint);">(timdr_breaks)</span></span>
+        <span class="detail">brak przerw — wszystkie pola obecne <span class="muted">(dług publiczny, stopy, przepływy kapitału, kursy FX, surowce)</span></span>
+        <span class="stat"><span class="pill ok"><span class="dot"></span>0</span></span>
+      </div>
+      <div class="risk-row">
+        <span class="dim">Redukcja modelu <span style="display:block; color:var(--ink-faint);">(gia_overload)</span></span>
+        <span class="detail">0 pól odrzuconych <span class="muted">— wszystkie pola tej migawki pokrywają się ze zmiennymi sterującymi GIA</span></span>
+        <span class="stat"><span class="pill ok"><span class="dot"></span>0</span></span>
+      </div>
+      <div class="risk-row">
+        <span class="dim">Napięcie międzyrynkowe <span style="display:block; color:var(--ink-faint);">(fieldcore_tension)</span></span>
+        <span class="detail">kapitał: ok · waluty: ok · handel: ok · surowce: ok</span>
+        <span class="stat"><span class="pill ok"><span class="dot"></span>4/4</span></span>
+      </div>
+      <div class="risk-row">
+        <span class="dim">Słabości strukturalne <span style="display:block; color:var(--ink-faint);">(core_nodes_weakness)</span></span>
+        <span class="detail">USA: dług, zmienność polit. · UE: fragmentacja, wolna polityka · Chiny: nieruchomości, kontrola FX</span>
+        <span class="stat"><span class="pill warn"><span class="dot"></span>6</span></span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>
+      GSF jest modelem koncepcyjnym (kategoria „Formalizacje TIMDR” / „Modele koncepcyjne” w jbackk-lang.github.io) — werdykt „stable” opisuje kompletność struktury danych tej migawki, nie jest rekomendacją inwestycyjną ani oceną ryzyka rynkowego. Poniższe liczby makro pochodzą z realnych, cytowanych źródeł.
+    </span>
+    <span class="srcs">
+      <a href="https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm">Fed — FOMC statement, lipiec 2026</a>
+      <a href="https://fred.stlouisfed.org/series/ECBDFR">FRED — stopa depozytowa EBC (ECBDFR)</a>
+      <a href="https://www.cnbc.com/2026/04/20/china-keeps-benchmark-lending-rates-unchanged-as-economic-growth-revs-up-amid-mounting-middle-east-risk-mount-.html">PBOC — LPR, kwiecień 2026</a>
+      <a href="https://fred.stlouisfed.org/series/GFDEGDQ188S">FRED — dług federalny USA / PKB</a>
+      <a href="https://tradingeconomics.com/euro-area/government-debt-to-gdp">Trading Economics — dług strefy euro / PKB</a>
+      <a href="https://tradingeconomics.com/china/government-debt-to-gdp/forecast">Trading Economics — dług Chin / PKB</a>
+      <a href="https://www.xe.com/en-us/currencyconverter/convert/?Amount=1&amp;From=EUR&amp;To=USD">XE — EUR/USD</a>
+      <a href="https://tradingeconomics.com/china/currency">Trading Economics — USD/CNY</a>
+      <a href="https://tradingeconomics.com/united-states/current-account">Trading Economics — rachunek bieżący USA</a>
+      <a href="https://tradingeconomics.com/china/current-account">Trading Economics — rachunek bieżący Chin</a>
+      <a href="https://tradingeconomics.com/euro-area/current-account/news/526983">Trading Economics — rachunek bieżący strefy euro</a>
+      <a href="https://tradingeconomics.com/commodity/brent-crude-oil">Trading Economics — ropa Brent</a>
+    </span>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var canvas = document.getElementById('fieldMap');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+
+  // Rdzenie pola ulozone w TROJKAT ZALEZNOSCI (nie wg realnej geografii
+  // -- na wyrazna prosbe: uklad ma pokazywac powiazania, nie polozenie
+  // na mapie). Wspolrzedne x,y wprost w przestrzeni canvasu (900x430).
+  // sila ugiecia/promien kuli znormalizowane do USA=1.0 z dlugu
+  // publicznego/PKB (patrz podpis pod mapa i karty CORE-NODES powyzej).
+  var CENTERS = [
+    { name: 'USA',   x: 230, y: 300, strength: 1.00, blob: '--accent' },
+    { name: 'UE',    x: 450, y: 110, strength: 0.72, blob: '--accent' },
+    { name: 'Chiny', x: 670, y: 300, strength: 0.73, blob: '--warm' }
+  ];
+
+  // siatka rownoleznikow/poludnikow to czysto dekoracyjna tekstura pola
+  // (nie odwzorowuje juz realnej geografii, skoro rdzenie sa w trojkacie) --
+  // projekcja rownomierna na cala szerokosc/wysokosc canvasu.
+  function project(latIdx, lonIdx) {
+    return [ (lonIdx + 180) / 360 * W, (90 - latIdx) / 180 * H ];
+  }
+
+  var SIGMA = 95, MAX_PULL = 60;
+
+  function warp(px, py) {
+    var dx = 0, dy = 0;
+    for (var i = 0; i < CENTERS.length; i++) {
+      var c = CENTERS[i];
+      var ddx = c.x - px, ddy = c.y - py;
+      var dist = Math.sqrt(ddx * ddx + ddy * ddy) + 1;
+      var falloff = Math.exp(-(dist * dist) / (2 * SIGMA * SIGMA));
+      var pull = c.strength * MAX_PULL * falloff;
+      dx += (ddx / dist) * pull;
+      dy += (ddy / dist) * pull;
+    }
+    return [px + dx, py + dy];
+  }
+
+  function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  function drawGrid() {
+    ctx.clearRect(0, 0, W, H);
+    var gridColor = cssVar('--border');
+    var faintColor = cssVar('--ink-faint');
+
+    ctx.strokeStyle = gridColor;
+    ctx.lineWidth = 1;
+
+    // poludniki (stala dlugosc, zmienna szerokosc)
+    for (var lon = -180; lon <= 180; lon += 30) {
+      ctx.beginPath();
+      var started = false;
+      for (var lat = -80; lat <= 80; lat += 4) {
+        var pr = project(lat, lon);
+        var pt = warp(pr[0], pr[1]);
+        if (!started) { ctx.moveTo(pt[0], pt[1]); started = true; }
+        else ctx.lineTo(pt[0], pt[1]);
+      }
+      ctx.stroke();
+    }
+    // rownolezniki (stala szerokosc, zmienna dlugosc)
+    for (var lat2 = -60; lat2 <= 60; lat2 += 30) {
+      ctx.beginPath();
+      var started2 = false;
+      for (var lon2 = -180; lon2 <= 180; lon2 += 4) {
+        var pr2 = project(lat2, lon2);
+        var pt2 = warp(pr2[0], pr2[1]);
+        if (!started2) { ctx.moveTo(pt2[0], pt2[1]); started2 = true; }
+        else ctx.lineTo(pt2[0], pt2[1]);
+      }
+      ctx.stroke();
+    }
+
+    // rownik, wyrozniony
+    ctx.strokeStyle = faintColor;
+    ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    var startedEq = false;
+    for (var lon3 = -180; lon3 <= 180; lon3 += 4) {
+      var pre = project(0, lon3);
+      var pte = warp(pre[0], pre[1]);
+      if (!startedEq) { ctx.moveTo(pte[0], pte[1]); startedEq = true; }
+      else ctx.lineTo(pte[0], pte[1]);
+    }
+    ctx.stroke();
+
+    // boki trojkata zaleznosci -- grubosc/nieprzezroczystosc ∝ laczne
+    // napiecie obu koncow (srednia sily obu wezlow). Ilustracyjne, nie
+    // pomiar realnych przeplywow handlowych -- patrz podpis pod mapa.
+    var edgeColor = cssVar('--warm');
+    var pairs = [[0, 1], [1, 2], [0, 2]];
+    pairs.forEach(function (pair) {
+      var a = CENTERS[pair[0]], b = CENTERS[pair[1]];
+      var combined = (a.strength + b.strength) / 2;
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.strokeStyle = edgeColor;
+      ctx.globalAlpha = 0.18 + combined * 0.35;
+      ctx.lineWidth = 1 + combined * 4;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    });
+
+    // rdzenie jako kule -- gradient radialny z przesunietym highlightem
+    // (symulacja oswietlenia z gory-lewej) + miekki cien pod kula.
+    CENTERS.forEach(function (c) {
+      var fillColor = cssVar(c.blob);
+      var radius = 26 + c.strength * 18;
+
+      // cien
+      ctx.beginPath();
+      ctx.ellipse(c.x, c.y + radius * 0.72, radius * 0.75, radius * 0.22, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,0,0,0.18)';
+      ctx.fill();
+
+      // kula
+      var hl = ctx.createRadialGradient(
+        c.x - radius * 0.35, c.y - radius * 0.4, radius * 0.1,
+        c.x, c.y, radius
+      );
+      hl.addColorStop(0, '#ffffff');
+      hl.addColorStop(0.18, fillColor);
+      hl.addColorStop(1, fillColor);
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = hl;
+      ctx.globalAlpha = 0.92;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = fillColor;
+      ctx.stroke();
+
+      ctx.font = '600 13px "IBM Plex Mono", monospace';
+      ctx.fillStyle = cssVar('--ink');
+      ctx.textAlign = 'center';
+      ctx.fillText(c.name, c.x, c.y + radius + 18);
+    });
+  }
+
+  drawGrid();
+  window.addEventListener('resize', drawGrid);
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawGrid);
+  }
+
+  // menu nad kazdym rdzeniem: wybor wskaznika -> odczyt. DATA wystawione
+  // na window, zeby skrypt fetch+render nizej mogl podmieniac wartosci
+  // na zywe, gdy data.json sie zaladuje (bez przepisywania tego bloku).
+  window.gsfNodeMenuData = {
+    usa:   { rate: '3,50–3,75%', debt: '122,6% PKB', ca: '−226,8 mld USD', oil: '95,23 USD/bbl' },
+    eu:    { rate: '2,25%', debt: '88,1% PKB', ca: '+261,4 mld EUR (2025)', fx: '1,1603' },
+    china: { rate: '3,0% / 3,5%', debt: '~90,0% PKB', ca: '+184,3 mld USD', fx: '6,7192' }
+  };
+  function gsfRefreshMenuOutput(node) {
+    var sel = document.querySelector('.node-menu select[data-node="' + node + '"]');
+    var out = document.querySelector('output[data-out="' + node + '"]');
+    var d = window.gsfNodeMenuData;
+    if (sel && out && d[node] && d[node][sel.value]) out.textContent = d[node][sel.value];
+  }
+  document.querySelectorAll('.node-menu select').forEach(function (sel) {
+    sel.addEventListener('change', function () {
+      gsfRefreshMenuOutput(sel.getAttribute('data-node'));
+    });
+  });
+})();
+</script>
+
+<script>
+(function () {
+  // Wczytuje dashboard/data.json (pisany przez scripts/fetch_gsf_data.py
+  // przez GitHub Actions -- patrz .github/workflows/update_gsf_data.yml)
+  // i nadpisuje statyczne wartosci z 4.09.2026 zywymi, jesli dostepne.
+  //
+  // WAZNE OGRANICZENIE: fetch() do pliku lokalnego (file://) jest
+  // blokowany przez wiekszosc przegladarek ze wzgledow bezpieczenstwa --
+  // dziala tylko gdy strona jest serwowana przez http(s) (GitHub Pages,
+  // lokalny serwer). Otwarcie pliku podwojnym kliknieciem pokaze
+  // statyczny fallback juz wpisany w HTML -- to oczekiwane, nie blad.
+
+  function fmtNum(v, d) {
+    return Number(v).toLocaleString('pl-PL', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+  function setText(id, text) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+
+  function trendChip(elId, trend, unit) {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    if (!trend || trend.method !== 'naive_linear_extrapolation') { el.innerHTML = ''; return; }
+    var dir = trend.slope_per_step > 0.01 ? 'up' : (trend.slope_per_step < -0.01 ? 'down' : 'flat');
+    var arrow = dir === 'up' ? '↗' : (dir === 'down' ? '↘' : '→');
+    el.innerHTML = '<span class="trend-chip ' + dir + '" title="naiwna ekstrapolacja liniowa z ostatnich '
+      + trend.n + ' obserwacji, nie prognoza ekonometryczna">' + arrow + ' proj. '
+      + fmtNum(trend.next_step_estimate, 1) + unit + '</span>';
+  }
+
+  function renderLive(data) {
+    var usa = data.usa || {}, eu = data.eu || {}, china = data.china || {};
+    var d = window.gsfNodeMenuData;
+
+    if (usa.fed_funds_upper != null && usa.fed_funds_lower != null) {
+      var ff = fmtNum(usa.fed_funds_lower, 2) + '–' + fmtNum(usa.fed_funds_upper, 2) + '%';
+      setText('usa-fedfunds', ff);
+      if (d) d.usa.rate = ff;
+    }
+    if (usa.fed_funds_date) setText('usa-fedfunds-date', 'FRED (DFEDTARU/DFEDTARL), stan na ' + usa.fed_funds_date);
+
+    if (usa.debt_gdp != null) {
+      var debtTxt = fmtNum(usa.debt_gdp, 1) + '%';
+      document.getElementById('usa-debtgdp').childNodes[0].textContent = debtTxt + ' ';
+      trendChip('usa-debtgdp-trend', usa.debt_gdp_trend, '%');
+      if (d) d.usa.debt = debtTxt + ' PKB';
+    }
+    if (usa.debt_gdp_date) setText('usa-debtgdp-date', 'FRED (GFDEGDQ188S), ' + usa.debt_gdp_date);
+
+    if (usa.current_account_busd != null) {
+      var sign = usa.current_account_busd >= 0 ? '+' : '−';
+      var caTxt = sign + fmtNum(Math.abs(usa.current_account_busd), 1) + ' mld USD';
+      document.getElementById('usa-ca').childNodes[0].textContent = caTxt + ' ';
+      trendChip('usa-ca-trend', usa.current_account_trend, ' mld');
+      if (d) d.usa.ca = caTxt;
+    }
+    if (usa.current_account_date) setText('usa-ca-date', 'FRED (IEABC), ' + usa.current_account_date);
+
+    if (usa.brent_usd_bbl != null) {
+      var oilTxt = fmtNum(usa.brent_usd_bbl, 2);
+      setText('fx-brent', oilTxt);
+      if (d) d.usa.oil = oilTxt + ' USD/bbl';
+    }
+
+    if (eu.ecb_rate != null) {
+      setText('eu-rate', fmtNum(eu.ecb_rate, 2) + '%');
+      if (d) d.eu.rate = fmtNum(eu.ecb_rate, 2) + '%';
+    }
+    if (eu.ecb_rate_date) setText('eu-rate-date', 'FRED (ECBDFR), stan na ' + eu.ecb_rate_date);
+    if (eu.eur_usd != null) {
+      setText('fx-eurusd', fmtNum(eu.eur_usd, 4));
+      if (d) d.eu.fx = fmtNum(eu.eur_usd, 4);
+    }
+
+    if (china.usd_cny != null) {
+      setText('fx-usdcny', fmtNum(china.usd_cny, 4));
+      if (d) d.china.fx = fmtNum(china.usd_cny, 4);
+    }
+
+    ['usa', 'eu', 'china'].forEach(function (n) {
+      if (typeof gsfRefreshMenuOutput === 'function') gsfRefreshMenuOutput(n);
+    });
+  }
+
+  function initManualFields() {
+    document.querySelectorAll('[data-manual]').forEach(function (input) {
+      var key = input.getAttribute('data-manual');
+      var noteEl = document.getElementById(input.id.replace('-input', '-note'));
+      var stored = null;
+      try { stored = localStorage.getItem('gsf_manual_' + key); } catch (e) { /* prywatne okno itp. */ }
+      if (stored) {
+        try {
+          var parsed = JSON.parse(stored);
+          input.value = parsed.value;
+          if (noteEl) noteEl.textContent = 'zapisano ręcznie ' + parsed.savedAt;
+        } catch (e) { /* zly JSON w localStorage -- ignoruj, zostaw wartosc domyslna */ }
+      }
+      input.addEventListener('change', function () {
+        var payload = { value: input.value, savedAt: new Date().toLocaleDateString('pl-PL') };
+        try { localStorage.setItem('gsf_manual_' + key, JSON.stringify(payload)); } catch (e) { /* brak storage */ }
+        if (noteEl) noteEl.textContent = 'zapisano ręcznie ' + payload.savedAt;
+      });
+    });
+  }
+
+  function setLiveStatus(isLive, generatedAt) {
+    var el = document.getElementById('live-status');
+    var txt = document.getElementById('live-status-text');
+    if (!el || !txt) return;
+    if (isLive) {
+      el.className = 'live-status is-live';
+      var d = generatedAt ? new Date(generatedAt) : null;
+      txt.textContent = 'dane na żywo (data.json) · ' + (d ? d.toLocaleString('pl-PL') : 'brak znacznika czasu');
+    } else {
+      el.className = 'live-status is-fallback';
+      txt.textContent = 'dane statyczne z 4.09.2026 — data.json niedostępny w tym widoku (np. otwarte jako plik lokalny)';
+    }
+  }
+
+  initManualFields();
+
+  fetch('data.json', { cache: 'no-store' })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function (data) {
+      renderLive(data);
+      setLiveStatus(true, data.generated_at);
+    })
+    .catch(function () {
+      setLiveStatus(false, null);
+    });
+})();
+</script>
+</body>
+</html>
