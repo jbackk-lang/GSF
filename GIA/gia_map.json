@@ -4,7 +4,7 @@
     "public_debt",
     "capital_flows",
     "fx_rates",
-    "commodity_index"
+    "commodities"
   ],
   "discard_rules": {
     "correlation_threshold": 0.95,
