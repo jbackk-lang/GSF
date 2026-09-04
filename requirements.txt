@@ -1,0 +1,6 @@
+# fetch_gsf_data.py uzywa wylacznie standardowej biblioteki Pythona
+# (urllib, json, datetime) -- brak zewnetrznych zaleznosci, zeby
+# workflow GitHub Actions nie musial nic instalowac (`pip install` nie
+# jest w ogole potrzebny). Ten plik istnieje tylko po to, zeby
+# konwencja "requirements.txt w kazdym module" byla spojna z reszta
+# repo -- nie znaczy, ze cokolwiek trzeba instalowac.
