@@ -1,0 +1,16 @@
+{
+  "nodes": {
+    "USA": {
+      "strengths": ["usd_dominance", "bond_market_depth"],
+      "weaknesses": ["public_debt", "political_volatility"]
+    },
+    "EU": {
+      "strengths": ["trade_volume", "banking_scale"],
+      "weaknesses": ["fragmentation", "slow_policy_response"]
+    },
+    "China": {
+      "strengths": ["manufacturing_core", "commodity_influence"],
+      "weaknesses": ["real_estate_risk", "fx_controls"]
+    }
+  }
+}

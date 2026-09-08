@@ -1,0 +1,49 @@
+name: Aktualizacja danych GSF
+
+# Odswieza dashboard/data.json realnymi danymi makro (FRED + Frankfurter)
+# -- patrz scripts/fetch_gsf_data.py za pelne uzasadnienie zrodel i
+# jawnie wymienione ograniczenia (Chiny/UE-dlug/UE-CA nie sa tu
+# automatyzowane, brak darmowego czystego API -- patrz naglowek
+# skryptu).
+#
+# UWAGA O WYKONANIU: ten workflow zostal napisany w sesji bez dostepu
+# do GitHub Actions (nie moglem go sam uruchomic ani zweryfikowac) --
+# skladnia sprawdzona recznie wzgledem oficjalnej dokumentacji
+# actions/checkout@v4, actions/setup-python@v5 i
+# stefanzweifel/git-auto-commit-action@v5, ale PIERWSZE uruchomienie
+# (recznie, przez "Run workflow" w zakladce Actions) powinno byc
+# potwierdzone przed poleganiem na harmonogramie.
+
+on:
+  schedule:
+    # codziennie 06:00 UTC -- dane FRED/EBC/Frankfurter aktualizuja sie
+    # co najwyzej raz dziennie, czestsze odpytywanie nic by nie dalo
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}  # reczny przycisk "Run workflow" w GitHub UI
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Ustaw Pythona
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Pobierz dane (FRED + Frankfurter)
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python scripts/fetch_gsf_data.py
+
+      - name: Commituj dashboard/data.json, jesli sie zmienil
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(gsf): auto-aktualizacja danych dashboardu"
+          file_pattern: "dashboard/data.json"
+          commit_user_name: "gsf-data-bot"
+          commit_user_email: "actions@github.com"
