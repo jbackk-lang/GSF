@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-30T12:27:59.166404+00:00",
+  "generated_at": "2026-10-31T11:56:33.780483+00:00",
   "generator": "scripts/fetch_gsf_data.py",
   "usa": {
     "fed_funds_upper": 3.75,
@@ -16,10 +16,10 @@
   "eu": {
     "ecb_rate": 2.25,
     "ecb_rate_source": "fallback",
-    "eur_usd": 1.113
+    "eur_usd": 1.1172
   },
   "china": {
-    "usd_cny": 6.6616
+    "usd_cny": 6.6529
   },
   "manual_defaults": {
     "china_lpr_1y": "3,0%",
